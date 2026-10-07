@@ -307,4 +307,179 @@
             <h1>🎵 Lyrics Touch to Copy</h1>
             <p>এক ক্লিকেই আপনার পছন্দের লিরিক্স কপি করুন</p>
         </div>
-        <button class="theme-toggle"
+        <button class="theme-toggle" onclick="toggleTheme()">🌙 ডার্ক মোড</button>
+    </div>
+
+    <!-- Home View (Search, Categories & Grid) -->
+    <div id="homeView" class="section-view active">
+        <div class="controls">
+            <input type="text" id="searchInput" class="search-input" placeholder="গান বা লিরিক্স খুঁজুন..." onkeyup="filterLyrics()">
+            <div class="categories">
+                <button class="cat-btn active" onclick="filterCategory('all', this)">সবগুলো</button>
+                <button class="cat-btn" onclick="filterCategory('gojol', this)">গজল/নাথ</button>
+                <button class="cat-btn" onclick="filterCategory('romantic', this)">রোমান্টিক</button>
+                <button class="cat-btn" onclick="filterCategory('dance', this)">ড্যান্স/ভাইরাল</button>
+            </div>
+        </div>
+        <div class="lyrics-grid" id="lyricsGrid"></div>
+    </div>
+
+    <!-- Favorites View -->
+    <div id="favView" class="section-view">
+        <div style="text-align: center; margin-bottom: 20px;">
+            <h2 style="color: var(--primary-color);">❤️ আপনার প্রিয় লিরিক্স</h2>
+        </div>
+        <div class="lyrics-grid" id="favGrid"></div>
+    </div>
+
+    <!-- Profile View -->
+    <div id="profileView" class="section-view">
+        <div class="profile-card">
+            <div class="profile-avatar">👤</div>
+            <h2>প্রোফাইল</h2>
+            <p>এই অ্যাপটি আপনার লিরিক্স সহজে কপি এবং ম্যানেজ করার জন্য ডিজাইন করা হয়েছে। সকল পছন্দ ও বুকমার্ক লোকাল স্টোরেজে নিরাপদে সংরক্ষিত থাকে।</p>
+        </div>
+    </div>
+
+    <!-- Bottom Navigation Bar -->
+    <div class="bottom-nav">
+        <button class="nav-item active" onclick="switchTab('home', this)">
+            <span class="icon">🏠</span>
+            <span>হোম</span>
+        </button>
+        <button class="nav-item" onclick="switchTab('fav', this)">
+            <span class="icon">❤️</span>
+            <span>প্রিয়</span>
+        </button>
+        <button class="nav-item" onclick="switchTab('profile', this)">
+            <span class="icon">👤</span>
+            <span>প্রোফাইল</span>
+        </button>
+    </div>
+
+    <div id="toast" class="toast">লিরিক্স ক্লিপবোর্ডে কপি হয়েছে!</div>
+
+    <script>
+        let currentCategory = 'all';
+        let favorites = JSON.parse(localStorage.getItem('lyricFavorites')) || [];
+
+        const lyricsData = [
+            { id: 1, category: "gojol", title: "Keno Bare Bare Mone Pare", text: `ক্যানো বারে বারে মনে পড়ে\nমদিনার স্মৃতি গুলো\nচোখে ভেসে ওঠে বারে বারে\nসবুজ গম্বুজ ও সোনার মিনার।` },
+            { id: 2, category: "gojol", title: "Madinaye Jabo Jabo", text: `মদিনায়ে যাবো যাবো\nমনে বড় আশা,\nদাও গো নবী তাওফিক\nমিটাও মনের পিপাসা।` },
+            { id: 3, category: "romantic", title: "Romeo", text: `① ──❥ Mon ta dilem tomay ..!! 🌸💗\n② ──❥ Romeo Romeo ..!! 🌷🥰\n③ ──❥ Preme porechi ami ..!! 🥀❤️\n④ ──❥ Chokh buje dekhi tomay ..!! 🫶🌸\n⑤ ──❥ Amar Romeo ..!! 💍💗` },
+            { id: 4, category: "romantic", title: "Prothom Raate", text: `⎯͢⎯⃝১🌷𝐇𝐨𝐨 𝐀𝐜𝐡𝐨𝐥 𝐃𝐡𝐨𝐫𝐞...!!🌷\n⎯͢⎯⃝২🌷𝐓𝐚𝐧 𝐃𝐢𝐨 𝐧𝐚...!!🌷\n⎯͢⎯⃝৩🌷𝐋𝐚𝐣𝐞 𝐌𝐨𝐫𝐞 𝐉𝐚𝐢...!!🌷\n⎯͢⎯⃝৪🌷𝐏𝐫𝐨𝐭𝐡𝐨𝐦 𝐑𝐚𝐚𝐭𝐞...!!🌷` },
+            { id: 5, category: "dance", title: "Super Boka", text: `⎯͢১⎯⃝🍒 𝐎𝐨 𝐌𝐨𝐧𝐞𝐫 ⎯⃝🐲 𝐎𝐢 𝐂𝐨𝐥𝐨𝐧𝐲 𝐓𝐞\n⎯͢২⎯⃝🍒 𝐇𝐚𝐧𝐠𝐚𝐦𝐚 𝐇𝐨𝐢 ⎯⃝🐲 𝐂𝐡𝐡𝐨𝐲\n⎯͢৩⎯⃝🍒 𝐂𝐡𝐚𝐧𝐝 ⎯⃝🐲 𝐒𝐡𝐢𝐩𝐞\n⎯͢৪⎯⃝🍒 𝐃𝐚𝐧𝐜𝐞 ⎯⃝🐲 𝐌𝐚𝐫𝐞` },
+            { id: 6, category: "dance", title: "Nagin Dance", text: `•𓂃 𝐒𝐡𝐚𝐠𝐚𝐧𝐚 𝐃𝐢 𝐑𝐚𝐚𝐭 𝐑𝐚𝐚𝐭..!! ¹ 🌙🎉\n•𓂃 𝐒𝐚𝐣𝐧𝐚 𝐉𝐞𝐞 𝐇𝐨𝐭 𝐇𝐨𝐭..!! ² 🔥💖\n•𓂃 𝐌𝐚𝐢𝐧 𝐍𝐚𝐠𝐢𝐧 𝐍𝐚𝐠𝐢𝐧..!! 🐍✨\n•𓂃 𝐍𝐚𝐠𝐢𝐧 𝐃𝐚𝐧𝐜𝐞 𝐍𝐚𝐜𝐡𝐧𝐚..!! 💃🎶` }
+        ];
+
+        function renderLyrics(data, containerId) {
+            const container = document.getElementById(containerId);
+            container.innerHTML = '';
+            
+            if (data.length === 0) {
+                container.innerHTML = `<p style="grid-column: 1/-1; text-align: center; color: var(--muted-color); padding: 40px;">কোনো লিরিক্স পাওয়া যায়নি!</p>`;
+                return;
+            }
+
+            data.forEach(item => {
+                const isFav = favorites.includes(item.id);
+                const card = document.createElement('div');
+                card.className = 'lyric-card';
+                card.innerHTML = `
+                    <div>
+                        <div class="card-top">
+                            <div class="lyric-title">${item.title}</div>
+                            <button class="fav-btn ${isFav ? 'active' : ''}" onclick="toggleFavorite(${item.id})">
+                                ${isFav ? '❤️' : '🤍'}
+                            </button>
+                        </div>
+                        <div class="lyric-preview">${item.text}</div>
+                    </div>
+                    <button class="copy-btn" onclick="copyLyrics('${item.id}')">Copy Lyrics</button>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        function copyLyrics(id) {
+            const selected = lyricsData.find(item => item.id == id);
+            if (selected) {
+                navigator.clipboard.writeText(selected.text).then(() => {
+                    showToast();
+                });
+            }
+        }
+
+        function toggleFavorite(id) {
+            const index = favorites.indexOf(id);
+            if (index > -1) {
+                favorites.splice(index, 1);
+            } else {
+                favorites.push(id);
+            }
+            localStorage.setItem('lyricFavorites', JSON.stringify(favorites));
+            filterLyrics();
+            renderFavorites();
+        }
+
+        function showToast() {
+            const toast = document.getElementById('toast');
+            toast.style.display = 'block';
+            setTimeout(() => { toast.style.display = 'none'; }, 2000);
+        }
+
+        function filterCategory(cat, btn) {
+            currentCategory = cat;
+            document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            filterLyrics();
+        }
+
+        function filterLyrics() {
+            const query = document.getElementById('searchInput').value.toLowerCase();
+            const filtered = lyricsData.filter(item => {
+                const matchesCat = currentCategory === 'all' || item.category === currentCategory;
+                const matchesQuery = item.title.toLowerCase().includes(query) || item.text.toLowerCase().includes(query);
+                return matchesCat && matchesQuery;
+            });
+            renderLyrics(filtered, 'lyricsGrid');
+        }
+
+        function renderFavorites() {
+            const favData = lyricsData.filter(item => favorites.includes(item.id));
+            renderLyrics(favData, 'favGrid');
+        }
+
+        function switchTab(tab, btn) {
+            document.querySelectorAll('.section-view').forEach(v => v.classList.remove('active'));
+            document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
+            
+            btn.classList.add('active');
+            if (tab === 'home') {
+                document.getElementById('homeView').classList.add('active');
+            } else if (tab === 'fav') {
+                document.getElementById('favView').classList.add('active');
+                renderFavorites();
+            } else if (tab === 'profile') {
+                document.getElementById('profileView').classList.add('active');
+            }
+        }
+
+        function toggleTheme() {
+            document.body.classList.toggle('dark-mode');
+            const isDark = document.body.classList.contains('dark-mode');
+            localStorage.setItem('darkMode', isDark);
+            document.querySelector('.theme-toggle').textContent = isDark ? '☀️ লাইট মোড' : '🌙 ডার্ক মোড';
+        }
+
+        if (localStorage.getItem('darkMode') === 'true') {
+            document.body.classList.add('dark-mode');
+            document.querySelector('.theme-toggle').textContent = '☀️ লাইট মোড';
+        }
+
+        // Initial Load
+        renderLyrics(lyricsData, 'lyricsGrid');
+        renderFavorites();
+    </script>
+</body>
+</html>
