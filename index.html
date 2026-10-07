@@ -18,351 +18,337 @@
             color: #333;
             display: flex;
             justify-content: center;
+            min-height: 100vh;
+            padding: 20px 10px;
         }
 
         .app-container {
             width: 100%;
-            max-width: 480px;
-            background: #f7f6fb;
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            position: relative;
-            padding-bottom: 70px;
-        }
-
-        /* Top Header */
-        .top-bar {
-            background: #ffffff;
-            padding: 15px 20px;
-            display: flex;
-            align-items: center;
-            border-bottom: 1px solid #eee;
-            font-weight: bold;
-            font-size: 18px;
-        }
-
-        .top-bar i {
-            margin-right: 10px;
-            color: #f39c12;
-        }
-
-        /* Content Section */
-        .content {
-            padding: 20px;
-            flex: 1;
-        }
-
-        .header-title {
-            font-size: 26px;
-            font-weight: 800;
-            color: #1a1a1a;
-            margin-bottom: 4px;
-        }
-
-        .header-subtitle {
-            font-size: 14px;
-            color: #888;
-            margin-bottom: 20px;
-        }
-
-        /* Lyrics Cards List */
-        .lyrics-list {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-        }
-
-        .lyrics-card {
+            max-width: 500px;
             background: #ffffff;
             border-radius: 16px;
-            padding: 16px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        header {
+            background: linear-gradient(135deg, #6ea8fe, #a78bfa);
+            color: #fff;
+            padding: 24px 20px;
+            text-align: center;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+        }
+
+        header h1 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 6px;
+        }
+
+        header p {
+            font-size: 0.85rem;
+            opacity: 0.9;
+        }
+
+        .search-box {
+            padding: 16px 20px;
+            background: #fff;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 12px 16px;
+            border: 1px solid #e2e8f0;
+            border-radius: 20px;
+            outline: none;
+            font-size: 0.95rem;
+            transition: all 0.3s;
+        }
+
+        .search-box input:focus {
+            border-color: #8b5cf6;
+            box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.15);
+        }
+
+        .song-list {
+            list-style: none;
+            padding: 10px 16px;
+            flex-grow: 1;
+        }
+
+        .song-card {
+            background: #fdfdfd;
+            border: 1px solid #f1f5f9;
+            border-radius: 12px;
+            padding: 14px 16px;
+            margin-bottom: 10px;
             display: flex;
             align-items: center;
             justify-content: space-between;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.03);
             cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
         }
 
-        .card-left {
+        .song-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+            background: #fff;
+        }
+
+        .song-info {
             display: flex;
             align-items: center;
-            gap: 15px;
+            gap: 12px;
         }
 
-        .file-icon {
-            font-size: 28px;
-            color: #a2d2ff;
-        }
-
-        .file-info h3 {
-            font-size: 18px;
-            font-weight: 700;
-            color: #111;
-        }
-
-        .file-info p {
-            font-size: 13px;
-            color: #999;
-        }
-
-        .card-actions {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .btn-icon {
-            width: 36px;
-            height: 36px;
-            border-radius: 10px;
-            border: none;
+        .song-icon {
+            width: 40px;
+            height: 40px;
+            background: #f3e8ff;
+            color: #8b5cf6;
+            border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            cursor: pointer;
-            font-size: 14px;
+            font-size: 1.1rem;
         }
 
-        .btn-edit {
-            background: #f0eefd;
-            color: #6c5ce7;
+        .song-details h3 {
+            font-size: 1rem;
+            color: #1e293b;
         }
 
-        .btn-delete {
-            background: #ffeaea;
-            color: #ff6b6b;
+        .song-details p {
+            font-size: 0.8rem;
+            color: #64748b;
         }
 
-        .arrow-icon {
-            color: #ccc;
-            margin-left: 4px;
-        }
-
-        /* Add Button */
-        .add-btn {
-            width: 100%;
-            background: #1e1b2e;
-            color: #fff;
-            border: none;
-            padding: 16px;
-            border-radius: 16px;
-            font-size: 16px;
-            font-weight: 600;
-            margin-top: 25px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-        }
-
-        /* Navigation Bar */
-        .bottom-nav {
-            position: fixed;
-            bottom: 0;
-            width: 100%;
-            max-width: 480px;
-            background: #ffffff;
-            display: flex;
-            justify-content: space-around;
-            padding: 10px 0;
-            border-top: 1px solid #eee;
-        }
-
-        .nav-item {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            font-size: 11px;
-            color: #888;
-            cursor: pointer;
-            gap: 4px;
-        }
-
-        .nav-item.active {
-            color: #6c5ce7;
-        }
-
-        .nav-item i {
-            font-size: 18px;
-        }
-
-        /* Lyrics View Modal */
         .modal {
-            display: none;
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0,0,0,0.5);
+            background: rgba(0, 0, 0, 0.5);
+            display: none;
             justify-content: center;
-            align-items: center;
+            align-items: flex-end;
             z-index: 100;
         }
 
+        .modal.active {
+            display: flex;
+        }
+
         .modal-content {
-            background: white;
-            width: 90%;
-            max-width: 400px;
-            border-radius: 16px;
+            background: #fff;
+            width: 100%;
+            max-width: 500px;
+            max-height: 85vh;
+            border-top-left-radius: 20px;
+            border-top-right-radius: 20px;
             padding: 20px;
-            max-height: 80vh;
-            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            animation: slideUp 0.3s ease-out;
+        }
+
+        @keyframes slideUp {
+            from { transform: translateY(100%); }
+            to { transform: translateY(0); }
         }
 
         .modal-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 15px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid #f1f5f9;
+        }
+
+        .modal-header h2 {
+            font-size: 1.2rem;
+            color: #0f172a;
         }
 
         .close-btn {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            color: #64748b;
             cursor: pointer;
-            font-size: 20px;
+        }
+
+        .lyrics-container {
+            overflow-y: auto;
+            margin-top: 14px;
+            padding-right: 6px;
         }
 
         .lyric-item {
-            background: #f8f9fa;
-            padding: 12px;
-            border-radius: 8px;
-            margin-bottom: 8px;
             display: flex;
             justify-content: space-between;
             align-items: center;
+            padding: 10px 12px;
+            background: #f8fafc;
+            border-radius: 8px;
+            margin-bottom: 8px;
+            font-size: 0.92rem;
+            color: #334155;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .lyric-item:hover {
+            background: #f1f5f9;
         }
 
         .copy-btn {
-            background: #6c5ce7;
-            color: white;
+            background: #8b5cf6;
+            color: #fff;
             border: none;
             padding: 6px 12px;
             border-radius: 6px;
+            font-size: 0.8rem;
             cursor: pointer;
-            font-size: 12px;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .copy-btn:hover {
+            background: #7c3aed;
         }
     </style>
 </head>
 <body>
 
 <div class="app-container">
-    <!-- Top Header -->
-    <div class="top-bar">
-        <i class="fa-solid fa-pen-to-square"></i> LYRICS Touch To Copy
+    <header>
+        <h1><i class="fa-solid => music"></i> My Lyrics Collection</h1>
+        <p>যেকোনো লাইনে স্পর্শ করেই কপি করুন</p>
+    </header>
+
+    <div class="search-box">
+        <input type="text" id="searchInput" placeholder="গান খুঁজুন..." onkeyup="filterSongs()">
     </div>
 
-    <!-- Main Content -->
-    <div class="content">
-        <div class="header-title">My Lyrics Files</div>
-        <div class="header-subtitle">প্রতিটি Lyrics আলাদা File হিসেবে রাখুন</div>
-
-        <!-- Files List -->
-        <div class="lyrics-list" id="lyricsList"></div>
-
-        <button class="add-btn" onclick="addNewFile()">
-            <i class="fa-solid fa-plus"></i> Add Lyrics File
-        </button>
-    </div>
-
-    <!-- Bottom Navigation -->
-    <div class="bottom-nav">
-        <div class="nav-item active">
-            <i class="fa-solid fa-house"></i>
-            <span>Home</span>
-        </div>
-        <div class="nav-item">
-            <i class="fa-solid fa-magnifying-glass"></i>
-            <span>Search</span>
-        </div>
-        <div class="nav-item">
-            <i class="fa-regular fa-heart"></i>
-            <span>Favorites</span>
-        </div>
-        <div class="nav-item">
-            <i class="fa-regular fa-user"></i>
-            <span>My Profile</span>
-        </div>
-    </div>
+    <ul class="song-list" id="songList">
+        <!-- Songs generated via JS -->
+    </ul>
 </div>
 
-<!-- Modal for viewing lyrics inside a file -->
 <div class="modal" id="lyricsModal">
     <div class="modal-content">
         <div class="modal-header">
-            <h3 id="modalTitle">Lyrics 1</h3>
-            <span class="close-btn" onclick="closeModal()">&times;</span>
+            <h2 id="modalTitle">গান</h2>
+            <button class="close-btn" onclick="closeModal()">&times;</button>
         </div>
-        <div id="modalLyricsList"></div>
+        <div class="lyrics-container" id="lyricsContainer">
+            <!-- Lyrics lines generated via JS -->
+        </div>
     </div>
 </div>
 
 <script>
-    // Initial Sample Data (২১ টি গান সহ)
-    let lyricsFiles = [
+    const songs = [
         {
-            id: 1,
-            title: "Lyrics 1",
+            title: "কাজল কালো দুটি চোখে",
+            artist: "Bangla Song",
             items: [
-                "১. তোমার খোলা হাওয়া লাগিয়ে পালে",
-                "২. আমি চিনি গো চিনি তোমারে ওগো বিদেশিনী",
-                "৩. তুমি রবে নীরবে হৃদয়ে মম",
-                "৪. এমন দিনে তারে বলা যায়",
-                "৫. এই পথ যদি না শেষ হয়",
-                "৬. জীবন খাতার প্রতি পাতায়",
-                "৭. মায়াবন বিহারিনী হরিণী",
-                "৮. আলো আমার আলো ওগো",
-                "৯. জগতে আনন্দযজ্ঞে আমার নিমন্ত্রণ",
-                "১০. পুরনো সেই দিনের কথা",
-                "১১. মেঘের কোলে রোদ হেসেছে",
-                "১২. একলা চলো রে",
-                "১৩. পাগলা হাওয়ার বাদল দিনে",
-                "১৪. আমার হিয়ার মাঝে লুকিয়ে ছিলে",
-                "১৫. গ্রামে ওই দখিন সমীরণে",
-                "১৬. আনন্দলোকে মঙ্গলালয়ে",
-                "১৭. আমার মন মানে না",
-                "১৮. ঝর ঝর বরিষে বারিধারা",
-                "১৯. তোমায় গান শোনাবো",
-                "২০. দাঁড়িয়ে আছো তুমি আমার গানের ওপারে",
-                "২১. সুন্দরে সুন্দর তুমি হেই প্রভূ"
+                "➺❥⃟1কাজল কালো দুটি চোখে⸙❥︎𝄟≛⃝🥰",
+                "➺❥⃟2সে যখনই আমায় দেখে⸙❥︎𝄟≛⃝🎀",
+                "➺❥⃟3পড়েনা চোখেতে পলক⸙❥︎𝄟≛⃝💓",
+                "➺❥⃟4আর আসেনা কথা মুখে⸙❥︎𝄟≛⃝🥀",
+                "➺❥⃟5কাজল কালো দুটি চোখে⸙❥︎𝄟≛⃝🥰",
+                "➺❥⃟6সে যখনই আমায় দেখে⸙❥︎𝄟≛⃝🎀",
+                "➺❥⃟7পড়েনা চোখেতে পলক⸙❥︎𝄟≛⃝💓",
+                "➺❥⃟8আর আসেনা কথা মুখে⸙❥︎𝄟≛⃝🥀",
+                "➺❥⃟9তার চলে যাওয়া⸙❥︎𝄟≛⃝",
+                "➺❥⃟10ফিরে একটু চাওয়া⸙❥︎𝄟≛⃝🥀",
+                "➺❥⃟11এই বুকেতে⸙❥︎𝄟≛⃝🤍",
+                "➺❥⃟12ঝড় তুলে যায়⸙❥︎𝄟≛⃝☺️",
+                "➺❥⃟13যার ছবি এই⸙❥︎𝄟≛⃝🥀",
+                "➺❥⃟14মন এঁকে যায়⸙❥︎𝄟≛⃝💓",
+                "➺❥⃟15যার কথা ভেবে⸙❥︎𝄟≛⃝💝",
+                "➺❥⃟16দিন কেটে যায়⸙❥︎𝄟≛⃝🥀",
+                "➺❥⃟17সে কি জানে শুধু তাকে⸙❥︎𝄟≛⃝🌷",
+                "➺❥⃟18ভালোবাসে আমার হৃদয়⸙❥︎𝄟≛⃝🎀",
+                "➺❥⃟19যার ছবি এই ⸙❥︎𝄟≛⃝🥀",
+                "➺❥⃟20মন এঁকে যায়⸙❥︎𝄟≛⃝💓"
             ]
-        },
-        { id: 2, title: "Lyrics 2", items: Array(23).fill("নমুনা গান") },
-        { id: 3, title: "Lyrics 3", items: Array(36).fill("নমুনা গান") },
-        { id: 4, title: "Lyrics 4", items: Array(20).fill("নমুনা গান") }
+        }
     ];
 
-    // Render Files List
     function renderList() {
-        const container = document.getElementById('lyricsList');
-        container.innerHTML = '';
-
-        lyricsFiles.forEach((file, index) => {
-            const card = document.createElement('div');
-            card.className = 'lyrics-card';
-            card.innerHTML = `
-                <div class="card-left" onclick="openFile(${file.id})">
-                    <i class="fa-regular fa-file-lines file-icon"></i>
-                    <div class="file-info">
-                        <h3>${file.title}</h3>
-                        <p>${file.items.length}টি Lyrics</p>
+        const list = document.getElementById('songList');
+        list.innerHTML = '';
+        songs.forEach((song, index) => {
+            const li = document.createElement('li');
+            li.className = 'song-card';
+            li.onclick = () => openModal(index);
+            li.innerHTML = `
+                <div class="song-info">
+                    <div class="song-icon"><i class="fa-solid fa-music"></i></div>
+                    <div class="song-details">
+                        <h3>${song.title}</h3>
+                        <p>${song.artist}</p>
                     </div>
                 </div>
-                <div class="card-actions">
-                    <button class="btn-icon btn-edit" onclick="editFile(${file.id}, event)"><i class="fa-solid fa-pen"></i></button>
-                    <button class="btn-icon btn-delete" onclick="deleteFile(${file.id}, event)"><i class="fa-solid fa-trash-can"></i></button>
-                    <i class="fa-solid fa-chevron-right arrow-icon"></i>
-                </div>
+                <i class="fa-solid fa-chevron-right" style="color: #cbd5e1;"></i>
             `;
-            container.appendChild(card);
+            list.appendChild(li);
         });
     }
 
-    // Add New File
-    function addNewFile() {
-        const name = prompt("ফাইল এর নাম লিখুন:", `Lyrics ${lyricsFiles.length + 1}`);
-        if(name) {
+    function filterSongs() {
+        const query = document.getElementById('searchInput').value.toLowerCase();
+        const cards = document.querySelectorAll('.song-card');
+        songs.forEach((song, i) => {
+            if (song.title.toLowerCase().includes(query) || song.artist.toLowerCase().includes(query)) {
+                cards[i].style.display = 'flex';
+            } else {
+                cards[i].style.display = 'none';
+            }
+        });
+    }
+
+    function openModal(index) {
+        const file = songs[index];
+        document.getElementById('modalTitle').innerText = file.title;
+        const lyricsContainer = document.getElementById('lyricsContainer');
+        lyricsContainer.innerHTML = '';
+
+        file.items.forEach(lyric => {
+            const div = document.createElement('div');
+            div.className = 'lyric-item';
+            div.onclick = () => copyText(lyric);
+            div.innerHTML = `
+                <span>${lyric}</span>
+                <button class="copy-btn"><i class="fa-regular fa-copy"></i> কপি</button>
+            `;
+            lyricsContainer.appendChild(div);
+        });
+
+        document.getElementById('lyricsModal').classList.add('active');
+    }
+
+    function closeModal() {
+        document.getElementById('lyricsModal').classList.remove('active');
+    }
+
+    function copyText(text) {
+        navigator.clipboard.writeText(text);
+        alert('কপি হয়েছে: ' + text);
+    }
+
+    renderList();
+</script>
+</body>
+</html>        if(name) {
             lyricsFiles.push({
                 id: Date.now(),
                 title: name,
