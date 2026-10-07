@@ -3,257 +3,557 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LYRICS Touch To Copy</title>
+    <title>Lyrics Touch to Copy Collection</title>
     <style>
         * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
-            font-family: Arial, sans-serif;
-        }
-        body {
-            background-color: #f4f6f9;
-            padding: 15px;
-            display: flex;
-            justify-content: center;
-        }
-        .container {
-            width: 100%;
-            max-width: 500px;
-            background: #ffffff;
-            border-radius: 12px;
-            padding: 20px;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-        }
-        h2 {
-            text-align: center;
-            color: #4a154b;
-            margin-bottom: 20px;
-            font-size: 1.3rem;
-        }
-        
-        /* Folder Card Style */
-        .folder-card {
-            background: linear-gradient(135deg, #f3e8ff, #ffffff);
-            border: 1px solid #d8b4fe;
-            border-radius: 10px;
-            padding: 15px;
-            margin-bottom: 12px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            cursor: pointer;
-            transition: transform 0.2s;
-        }
-        .folder-card:hover {
-            transform: translateY(-2px);
-            background: #f3e8ff;
-        }
-        .folder-info h3 {
-            font-size: 1.1rem;
-            color: #6b21a8;
-        }
-        .folder-info p {
-            font-size: 0.85rem;
-            color: #666;
-            margin-top: 3px;
-        }
-        .open-icon {
-            font-size: 1.2rem;
-            color: #6b21a8;
-            font-weight: bold;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
 
-        /* Modal Box */
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.5);
-            justify-content: center;
-            align-items: center;
-            padding: 15px;
-            z-index: 1000;
+        body {
+            background-color: #f4f6f9;
+            color: #333;
+            padding: 20px;
         }
-        .modal-content {
-            background: white;
+
+        .header {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+
+        .header h1 {
+            color: #1e3c72;
+            font-size: 28px;
+            margin-bottom: 8px;
+        }
+
+        .search-container {
+            max-width: 600px;
+            margin: 0 auto 20px auto;
+        }
+
+        .search-input {
             width: 100%;
-            max-width: 480px;
-            max-height: 85vh;
+            padding: 12px 18px;
+            border: 2px solid #ddd;
+            border-radius: 25px;
+            font-size: 16px;
+            outline: none;
+            transition: border-color 0.3s;
+        }
+
+        .search-input:focus {
+            border-color: #1e3c72;
+        }
+
+        .lyrics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .lyric-card {
+            background: #fff;
             border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
             padding: 20px;
             display: flex;
             flex-direction: column;
-            overflow: hidden;
-        }
-        .modal-header {
-            display: flex;
             justify-content: space-between;
-            align-items: center;
-            padding-bottom: 10px;
-            border-bottom: 1px solid #eee;
-            margin-bottom: 15px;
-        }
-        .modal-header h3 {
-            color: #4a154b;
-            font-size: 1.1rem;
-        }
-        .close-btn {
-            background: #e5e7eb;
-            border: none;
-            font-size: 1.2rem;
-            width: 30px;
-            height: 30px;
-            border-radius: 50%;
-            cursor: pointer;
-            color: #333;
-        }
-        .lyrics-list {
-            overflow-y: auto;
-            flex-grow: 1;
-            padding-right: 5px;
+            transition: transform 0.2s, box-shadow 0.2s;
         }
 
-        /* Lyric Items */
-        .lyric-card {
-            background: #f9f9f9;
-            border: 1px solid #e0e0e0;
-            border-radius: 8px;
-            padding: 12px;
-            margin-bottom: 8px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            cursor: pointer;
-        }
         .lyric-card:hover {
-            background: #f0f0f0;
+            transform: translateY(-3px);
+            box-shadow: 0 6px 16px rgba(0,0,0,0.12);
         }
-        .lyric-text {
-            font-size: 0.95rem;
-            color: #333;
-            word-break: break-word;
+
+        .lyric-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: #1e3c72;
+            margin-bottom: 10px;
+            border-bottom: 2px solid #eef2f5;
+            padding-bottom: 6px;
         }
+
+        .lyric-preview {
+            font-size: 14px;
+            line-height: 1.6;
+            color: #555;
+            white-space: pre-line;
+            max-height: 150px;
+            overflow: hidden;
+            margin-bottom: 15px;
+        }
+
         .copy-btn {
-            background: #6b21a8;
-            color: white;
+            background: linear-gradient(135deg, #1e3c72, #2a5298);
+            color: #fff;
             border: none;
-            padding: 6px 12px;
-            border-radius: 5px;
-            font-size: 0.8rem;
+            padding: 10px 16px;
+            border-radius: 8px;
             cursor: pointer;
-            margin-left: 10px;
-            white-space: nowrap;
+            font-weight: 600;
+            transition: opacity 0.2s;
+            text-align: center;
+        }
+
+        .copy-btn:hover {
+            opacity: 0.9;
+        }
+
+        .toast {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: #2e7d32;
+            color: #fff;
+            padding: 10px 20px;
+            border-radius: 20px;
+            font-size: 14px;
+            display: none;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+            z-index: 1000;
         }
     </style>
 </head>
 <body>
 
-<div class="container">
-    <h2>🎵 লিরিক্স ফাইল তালিকা</h2>
-    <div id="folder-list"></div>
-</div>
-
-<!-- Modal -->
-<div class="modal" id="lyricsModal">
-    <div class="modal-content">
-        <div class="modal-header">
-            <h3 id="modalTitle">Lyrics</h3>
-            <button class="close-btn" onclick="closeModal()">✕</button>
-        </div>
-        <div class="lyrics-list" id="lyricsContainer"></div>
+    <div class="header">
+        <h1>🎵 Lyrics Touch to Copy</h1>
+        <p>ক্লিক করেই সম্পূর্ণ লিরিক্স কপি করুন</p>
     </div>
-</div>
 
-<script>
-    // আপনার লিরিক্স ডাটা (Lyrics - 1 এর ভেতর ২০টি লাইন রাখা আছে)
-    const lyricsData = [
-        {
-            title: "Lyrics - 1",
-            subtitle: "কাজল কালো দুটি চোখে",
-            lines: [
-                "➺❥⃟1কাজল কালো দুটি চোখে⸙❥︎𝄟≛⃝🥰",
-                "➺❥⃟2সে যখনই আমায় দেখে⸙❥︎𝄟≛⃝🎀",
-                "➺❥⃟3পড়েনা চোখেতে পলক⸙❥︎𝄟≛⃝💓",
-                "➺❥⃟4আর আসেনা কথা মুখে⸙❥︎𝄟≛⃝🥀",
-                "➺❥⃟5কাজল কালো দুটি চোখে⸙❥︎𝄟≛⃝🥰",
-                "➺❥⃟6সে যখনই আমায় দেখে⸙❥︎𝄟≛⃝🎀",
-                "➺❥⃟7পড়েনা চোখেতে পলক⸙❥︎𝄟≛⃝💓",
-                "➺❥⃟8আর আসেনা কথা মুখে⸙❥︎𝄟≛⃝🥀",
-                "➺❥⃟9তার চলে যাওয়া⸙❥︎𝄟≛⃝",
-                "➺❥⃟10ফিরে একটু চাওয়া⸙❥︎𝄟≛⃝🥀",
-                "➺❥⃟11এই বুকেতে⸙❥︎𝄟≛⃝🤍",
-                "➺❥⃟12ঝড় তুলে যায়⸙❥︎𝄟≛⃝☺️",
-                "➺❥⃟13যার ছবি এই⸙❥︎𝄟≛⃝🥀",
-                "➺❥⃟14মন এঁকে যায়⸙❥︎𝄟≛⃝💓",
-                "➺❥⃟15যার কথা ভেবে⸙❥︎𝄟≛⃝💝",
-                "➺❥⃟16দিন কেটে যায়⸙❥︎𝄟≛⃝🥀",
-                "➺❥⃟17সে কি জানে শুধু তাকে⸙❥︎𝄟≛⃝🌷",
-                "➺❥⃟18ভালোবাসে আমার হৃদয়⸙❥︎𝄟≛⃝🎀",
-                "➺❥⃟19যার ছবি এই ⸙❥︎𝄟≛⃝🥀",
-                "➺❥⃟20মন এঁকে যায়⸙❥︎𝄟≛⃝💓"
-            ]
-        },
-        {
-            title: "Lyrics - 2",
-            subtitle: "নতুন গানের ফোল্ডার (খালি)",
-            lines: [
-                "এখানে পরবর্তীতে নতুন গান যোগ করবেন"
-            ]
+    <div class="search-container">
+        <input type="text" id="searchInput" class="search-input" placeholder="গান বা লিরিক্স খুঁজুন..." onkeyup="filterLyrics()">
+    </div>
+
+    <div class="lyrics-grid" id="lyricsGrid">
+        <!-- Javascript will render lyrics cards here -->
+    </div>
+
+    <div id="toast" class="toast">লিরিক্স কপি হয়েছে!</div>
+
+    <script>
+        const lyricsData = [
+            {
+                id: 1,
+                title: "Prothom Raate (Achol Dhore Tan Dio Na)",
+                text: `⎯͢⎯⃝১🌷𝐇𝐨𝐨 𝐀𝐜𝐡𝐨𝐥 𝐃𝐡𝐨𝐫𝐞...!!🌷⎯꯭̽𝆺꯭𝅥
+⎯͢⎯⃝২🌷𝐓𝐚𝐧 𝐃𝐢𝐨 𝐧𝐚...!!🌷⎯꯭̽𝆺꯭𝅥
+⎯͢⎯⃝৩🌷𝐋𝐚𝐣𝐞 𝐌𝐨𝐫𝐞 𝐉𝐚𝐢...!!🌷⎯꯭̽𝆺꯭𝅥
+⎯͢⎯⃝৪🌷𝐏𝐫𝐨𝐭𝐡𝐨𝐦 𝐑𝐚𝐚𝐭𝐞...!!🌷⎯꯭̽𝆺꯭𝅥
+⎯͢⎯⃝৫🌷𝐀𝐦𝐢 𝐓𝐨𝐦𝐚𝐫...!!🌷⎯꯭̽𝆺꯭𝅥
+⎯͢⎯⃝৬🌷𝐊𝐚𝐜𝐡𝐞 𝐊𝐡𝐨𝐦𝐚 𝐂𝐡𝐚𝐢...!!🌷⎯꯭̽𝆺꯭𝅥
+⎯͢⎯⃝৭🌷𝐇𝐨𝐨 𝐒𝐨𝐡𝐤𝐞𝐫 𝐏𝐨𝐫𝐨𝐬...!!🌷⎯꯭̽𝆺꯭𝅥
+⎯͢⎯⃝৮🌷𝐃𝐞𝐛𝐨 𝐓𝐨𝐦𝐚𝐲...!!🌷⎯꯭̽𝆺꯭𝅥
+⎯͢⎯⃝৯🌷𝐓𝐡𝐞𝐤𝐨 𝐍𝐚 𝐃𝐮𝐫𝐞...!!🌷⎯꯭̽𝆺꯭𝅥
+⎯͢⎯⃝১০🌷𝐒𝐚𝐧𝐭𝐢 𝐊𝐡𝐮𝐣𝐞 𝐏𝐚𝐛𝐞 𝐀𝐦𝐫...!!🌷⎯꯭̽𝆺꯭𝅥
+⎯͢⎯⃝১১🌷𝐏𝐫𝐞𝐦𝐞𝐫 𝐀𝐝𝐨𝐫𝐞...!!🌷⎯꯭̽𝆺꯭𝅥
+⎯͢⎯⃝১২🌷𝐀𝐦𝐢 𝐂𝐡𝐚𝐢 𝐍𝐚 𝐓𝐨𝐦𝐚𝐫...!!🌷⎯꯭̽𝆺꯭𝅥
+⎯͢⎯⃝১৩🌷𝐏𝐫𝐞𝐦𝐞𝐫 𝐀𝐝𝐨𝐫𝐞...!!🌷⎯꯭̽𝆺꯭𝅥
+⎯͢⎯⃝১৪🌷𝐃𝐚𝐰 𝐍𝐚 𝐂𝐡𝐚𝐫𝐢𝐲𝐚...!!🌷⎯꯭̽𝆺꯭𝅥
+⎯͢⎯⃝১৫🌷𝐒𝐨𝐛 𝐊𝐢𝐜𝐡𝐮 𝐉𝐨𝐫 𝐤𝐨𝐫𝐞...!!🌷⎯꯭̽𝆺꯭𝅥
+⎯͢⎯⃝১৬🌷𝐍𝐢𝐨 𝐍𝐚 𝐊𝐚𝐫𝐢𝐲𝐚...!!🌷⎯꯭̽𝆺꯭𝅥
+⎯͢⎯⃝১৭🌷𝐍𝐢𝐨 𝐍𝐚 𝐊𝐚𝐫𝐢𝐲𝐚...!!🌷⎯꯭̽𝆺꯭𝅥
+⎯͢⎯⃝১৮🌷𝐆𝐡𝐨𝐫𝐞𝐫 𝐁𝐚𝐭𝐭𝐢 𝐍𝐢𝐯𝐚𝐢𝐲𝐚...!!🌷⎯꯭̽𝆺꯭𝅥`
+            },
+            {
+                id: 2,
+                title: "Super Boka (Khoka Elo Mach Dhorte)",
+                text: `⎯͢১⎯⃝🍒 𝐎𝐨 𝐌𝐨𝐧𝐞𝐫 ⎯⃝🐲 𝐎𝐢 𝐂𝐨𝐥𝐨𝐧𝐲 𝐓𝐞❥≛⃝ ❍͜
+⎯͢২⎯⃝🍒 𝐇𝐚𝐧𝐠𝐚𝐦𝐚 𝐇𝐨𝐢 ⎯⃝🐲 𝐂𝐡𝐡𝐨𝐲 ❥≛⃝ ❍͜
+⎯͢৩⎯⃝🍒 𝐂𝐡𝐚𝐧𝐝 ⎯⃝🐲 𝐒𝐡𝐢𝐩𝐞 ❥≛⃝ ❍͜
+⎯͢৪⎯⃝🍒 𝐃𝐚𝐧𝐜𝐞 ⎯⃝🐲 𝐌𝐚𝐫𝐞 ❥≛⃝ ❍͜
+⎯͢৫⎯⃝🍒 𝐁𝐢𝐜𝐡𝐜𝐡𝐮 ⎯⃝🐲 𝐄𝐦𝐨𝐧 ❥≛⃝ ❍͜
+⎯͢৬⎯⃝🍒 𝐓𝐨𝐫 𝐏𝐫𝐞𝐦𝐞 ⎯⃝🐲 𝐇𝐞𝐛𝐛𝐢 𝐇𝐨𝐲𝐞 ❥≛⃝ ❍͜
+⎯͢৭⎯⃝🍒 𝐍𝐚𝐜𝐡𝐢 ⎯⃝🐲 𝐓𝐚𝐭𝐚 𝐓𝐡𝐨𝐢 ❥≛⃝ ❍͜
+⎯͢৮⎯⃝🍒 𝐓𝐨𝐫 𝐌𝐨𝐧 ⎯⃝🐲 𝐏𝐚𝐫𝐚𝐫 𝐎𝐢 𝐆𝐨𝐥𝐢 ❥≛⃝ ❍͜
+⎯͢৯⎯⃝🍒 𝐀𝐦𝐚𝐫 ⎯⃝🐲 𝐋𝐢𝐥𝐚𝐫 𝐁𝐫𝐢𝐧𝐝𝐚𝐛𝐨𝐧 ❥≛⃝ ❍͜
+⎯͢১০⎯⃝🍒 𝐎𝐫𝐞 ⎯⃝🐲 𝐄𝐢 𝐏𝐫𝐞𝐦𝐞𝐫 ❥≛⃝ ❍͜
+⎯͢১১⎯⃝🍒 𝐂𝐡𝐚𝐥𝐮 ⎯⃝🐲 𝐊𝐡𝐨𝐤𝐚 ❥≛⃝ ❍͜
+⎯͢১২⎯⃝🍒 𝐇𝐨𝐲𝐞 𝐆𝐞𝐥𝐨 ⎯⃝🐲 𝐒𝐮𝐩𝐞𝐫 𝐁𝐨𝐤𝐚 ❥≛⃝ ❍͜
+⎯͢১৩⎯⃝🍒 𝐏𝐫𝐞𝐦𝐞𝐫 𝐎𝐢 ⎯⃝🐲 𝐒𝐭𝐫𝐨𝐧𝐠 𝐃𝐞𝐬𝐡𝐞 ❥≛⃝ ❍͜
+⎯͢১৪⎯⃝🍒 𝐅𝐮𝐥𝐥 𝐓𝐨 ⎯⃝🐲 𝐀𝐦𝐢 𝐅𝐥𝐚𝐭 ❥≛⃝ ❍͜
+⎯͢১৫⎯⃝🍒 𝐓𝐨𝐤𝐞 ⎯⃝🐲 𝐏𝐫𝐨𝐭𝐡𝐨𝐦𝐛𝐚𝐫 𝐃𝐞𝐤𝐡𝐞 ❥≛⃝ ❍͜
+⎯͢১৬⎯⃝🍒 𝐊𝐡𝐨𝐤𝐚 𝐄𝐥𝐨 ⎯⃝🐟 𝐌𝐚𝐜𝐡 𝐃𝐡𝐨𝐫𝐭𝐞 ❥≛⃝ ❍͜
+⎯͢১৭⎯⃝🍒 𝐂𝐡𝐢𝐥 ⎯⃝🐲 𝐍𝐚𝐝𝐢𝐫 𝐊𝐮𝐥𝐞 ❥≛⃝ ❍͜
+⎯͢১৮⎯⃝🍒 𝐂𝐡𝐨𝐤𝐡𝐞 𝐂𝐡𝐨𝐤𝐡 ⎯⃝🐲 𝐑𝐞𝐤𝐡𝐞 ❥≛⃝ ❍͜
+⎯͢১৯⎯⃝🍒 𝐂𝐡𝐡𝐢𝐩 𝐍𝐢𝐲𝐞 𝐉𝐚𝐛𝐞 ⎯⃝🐲 𝐊𝐡𝐨𝐥𝐚 𝐁𝐲𝐚𝐧𝐠𝐞 ❥≛⃝ ❍͜
+⎯͢২০⎯⃝🐟 𝐌𝐚𝐜𝐡 𝐍𝐢𝐲𝐞 ⎯⃝🐲 𝐉𝐚𝐛𝐞 𝐂𝐡𝐢𝐥𝐞 ❥≛⃝ ❍͜
+⎯͢২১⎯⃝🍒 𝐊𝐨𝐤𝐡𝐨𝐧𝐨 ⎯⃝🐲 𝐉𝐚𝐧𝐢𝐧𝐚 ❥≛⃝ ❍͜
+⎯͢২২⎯⃝🍒 𝐀𝐦𝐢 ⎯⃝🐲 𝐊𝐞𝐬 𝐊𝐡𝐞𝐲𝐞𝐜𝐡𝐢 ❥≛⃝ ❍͜
+⎯͢২৩⎯⃝🍒 𝐒𝐰𝐚𝐩𝐧𝐞𝐫𝐢 ⎯⃝🐲 𝐉𝐚𝐥𝐞 ❥≛⃝ ❍͜
+⎯͢২৪⎯⃝🍒 𝐓𝐨𝐫 𝐇𝐚𝐢 ⎯⃝🐲 𝐇𝐢 𝐕𝐨𝐥𝐭𝐚𝐠𝐞 𝐆𝐚𝐥𝐞 ❥≛⃝ ❍͜
+⎯͢২৫⎯⃝🍒 𝐄𝐢 𝐇𝐚𝐥𝐤𝐚 ⎯⃝🐲 𝐓𝐡𝐨𝐭 𝐑𝐞𝐤𝐡𝐞𝐜𝐡𝐢 ❥≛⃝ ❍͜
+⎯͢২৬⎯⃝🍒 𝐎𝐨 ⎯⃝🐲 𝐒𝐞𝐭 ❥≛⃝ ❍͜`
+            },
+            {
+                id: 3,
+                title: "Achha Lagta Hai (Tum Mein Aey Meherbaan)",
+                text: `① ✨⃟≛⃝💎⃟💙 𝐓𝐮𝐦 𝐌𝐞𝐢𝐧 𝐀𝐞𝐲 ✨⃟🦋
+② ✨⃟≛⃝🌹⃟💖 𝐌𝐞𝐡𝐞𝐫𝐛𝐚𝐚𝐧 ✨⃟🌸
+③ ✨⃟≛⃝💫⃟🤍 𝐒𝐚𝐫𝐢 𝐇𝐚𝐢 𝐊𝐡𝐨𝐨𝐛𝐢𝐲𝐚𝐧 ✨⃟🕊️
+④ ✨⃟≛⃝💐⃟💗 𝐁𝐡𝐨𝐥𝐚𝐩𝐚𝐧 𝐒𝐚𝐚𝐝𝐠𝐢 ✨⃟🌷
+⑤ ✨⃟≛⃝👑⃟💙 𝐃𝐢𝐥𝐤𝐚𝐬𝐡𝐢 𝐓𝐚𝐚𝐳𝐠𝐢 ✨⃟💎
+⑥ ✨⃟≛⃝🌺⃟💖 𝐃𝐢𝐥𝐤𝐚𝐬𝐡𝐢 ✨⃟🦢
+⑦ ✨⃟≛⃝💎⃟🤍 𝐓𝐮𝐦𝐬𝐞 𝐇𝐚𝐢 ✨⃟🕊️
+⑧ ✨⃟≛⃝🌹⃟💖 𝐓𝐚𝐚𝐳𝐠𝐢 ✨⃟🌸
+⑨ ✨⃟≛⃝💫⃟💙 𝐓𝐮𝐦𝐬𝐞 𝐇𝐚𝐢 ✨⃟⭐
+⑩ ✨⃟≛⃝🌸⃟🤍 𝐓𝐮𝐦 𝐇𝐮𝐞 𝐇𝐮𝐦𝐧𝐚𝐬𝐡𝐢 ✨⃟🦢
+⑪ ✨⃟≛⃝👑⃟💙 𝐇𝐨 𝐆𝐚𝐲𝐢 ✨⃟💎
+⑫ ✨⃟≛⃝🌺⃟💖 𝐌𝐚𝐢𝐧 𝐇𝐚𝐬𝐞𝐞𝐧 ✨⃟💕
+⑬ ✨⃟≛⃝💎⃟🤍 𝐑𝐚𝐧𝐠 𝐓𝐮𝐦𝐬𝐞 ✨⃟🕊️
+⑭ ✨⃟≛⃝🌹⃟💖 𝐌𝐢𝐥𝐞 𝐇𝐚𝐢 𝐒𝐚𝐫𝐞 ✨⃟🌷
+⑮ ✨⃟≛⃝👑⃟💙 𝐓𝐚𝐚𝐫𝐢𝐟 𝐉𝐨 𝐒𝐮𝐧𝐤𝐞 𝐓𝐮𝐦 ✨⃟💫
+⑯ ✨⃟≛⃝🌸⃟🤍 𝐀𝐢𝐬𝐞 𝐒𝐡𝐚𝐫𝐦𝐚 𝐉𝐚𝐭𝐢 𝐇𝐨 ✨⃟🦢
+⑰ ✨⃟≛⃝🌺⃟💖 𝐀𝐜𝐡𝐜𝐡𝐢 𝐋𝐚𝐠𝐭𝐢 𝐇𝐨 ✨⃟❤️
+⑱ ✨⃟≛⃝💎⃟💙 𝐊𝐚𝐛𝐡𝐢 𝐇𝐚𝐚𝐬 𝐃𝐞𝐭𝐢 𝐇𝐨 ✨⃟🕊️
+⑲ ✨⃟≛⃝🌹⃟💖 𝐀𝐮𝐫 𝐊𝐚𝐛𝐡𝐢 𝐈𝐭𝐫𝐚𝐚 𝐉𝐚𝐭𝐢 𝐇𝐨 ✨⃟🌸
+⑳ ✨⃟≛⃝🌺⃟💖 𝐀𝐜𝐡𝐜𝐡𝐢 𝐋𝐚𝐠𝐭𝐢 𝐇𝐨 ✨⃟💕
+㉑ ✨⃟≛⃝👑⃟🤍 𝐌𝐮𝐣𝐡𝐞 𝐃𝐞𝐤𝐡𝐤𝐞 𝐉𝐚𝐛 𝐓𝐮𝐦 ✨⃟💎
+㉒ ✨⃟≛⃝💫⃟💙 𝐘𝐮𝐡 𝐓𝐡𝐚𝐧𝐝𝐢 𝐀𝐚𝐡𝐞 𝐁𝐡𝐚𝐫𝐭𝐞 𝐇𝐨 ✨⃟⭐
+㉓ ✨⃟≛⃝🌺⃟💖 𝐀𝐜𝐡𝐜𝐡𝐢 𝐋𝐚𝐠𝐭𝐢 𝐇𝐨 ✨⃟💕`
+            },
+            {
+                id: 4,
+                title: "Chumu Ekechi Shobcheye Dami",
+                text: `¹. 𓂃𝑮𝒉𝒖𝒓𝒆 𝑷𝒉𝒊𝒓𝒆.⁂ 🦋
+². 𓂃𝑮𝒉𝒖𝒎𝒆𝒓 𝑽𝒆𝒓𝒓𝒆.⁂ 😴🌙
+³. 𓂃𝑱𝒆𝒈𝒆𝒄𝒉𝒆 𝑹𝒂𝒕.⁂ 🌙✨
+⁴. 𓂃𝑲𝒂𝒓𝒄𝒉𝒖𝒑𝒊 𝑲𝒐𝒓𝒆.⁂ 🤫🖤
+⁵. 𓂃𝑪𝒉𝒊𝒏𝒆𝒄𝒉𝒆 𝑹𝒐𝒅.⁂ ☀️🌼
+⁶. 𓂃𝑺𝒂𝒕𝒓𝒐𝒏𝒈𝒂 𝑨𝒍𝒐.⁂ 🌈✨
+⁷. 𓂃𝑽𝒉𝒂𝒓𝒂 𝑩𝒊𝒌𝒆𝒍.⁂ 🌸🌤️
+⁸. 𓂃𝑰𝒄𝒉𝒄𝒉𝒆 𝑷𝒂𝒕𝒉𝒂𝒍.⁂ 💌🦋
+⁹. 𓂃𝑱𝒂𝒏𝒕𝒆 𝑲𝒊 𝑩𝒂𝒌𝒊.⁂ 🥺💭
+¹⁰. 𓂃𝑨𝒓 𝑲𝒂𝒓𝒐.⁂ 🫶🏻🌷
+¹¹. 𓂃𝑴𝒂𝒏𝒕𝒆 𝑲𝒊 𝑷𝒓𝒂𝒎𝒂𝒏.⁂ 🫣💗
+¹². 𓂃𝑪𝒉𝒂𝒊 𝑨𝒓𝒐.⁂ 🌸🫧
+¹³. 𓂃𝑮𝒂𝒍𝒆 𝑪𝒉𝒐𝒌𝒉𝒆 𝑻𝒉𝒐𝒏𝒕𝒆 𝑻𝒐𝒓 𝑨𝒎𝒊.⁂ 🥰💋
+¹⁴. 𓂃𝑪𝒉𝒖𝒎𝒖 𝑬𝒌𝒆𝒄𝒉𝒊 𝑺𝒉𝒐𝒃𝒄𝒉𝒆𝒚𝒆 𝑫𝒂𝒎𝒊.⁂ 💋`
+            },
+            {
+                id: 5,
+                title: "Gulabi Aankhen",
+                text: `① 𝐆𝐮𝐥𝐚𝐛𝐢 𝐚𝐧𝐤𝐡𝐞𝐧 🌹
+② 𝐣𝐨 𝐭𝐞𝐫𝐢 𝐝𝐞𝐤𝐡𝐢 👀
+③ 𝐒𝐡𝐚𝐫𝐚𝐛𝐢 𝐲𝐞𝐡 𝐝𝐢𝐥 💖
+④ 𝐡𝐨 𝐠𝐚𝐲𝐚 ✨
+⑤ 𝐒𝐚𝐦𝐛𝐚𝐥𝐨 𝐦𝐮𝐣𝐡𝐤𝐨 🫶
+⑥ 𝐨 𝐦𝐞𝐫𝐞 𝐲𝐚𝐫𝐨𝐧 🤝
+⑦ 𝐒𝐚𝐦𝐛𝐚𝐥𝐧𝐚 𝐦𝐮𝐬𝐡𝐤𝐢𝐥 🥺
+⑧ 𝐡𝐨 𝐠𝐚𝐲𝐚 💫
+⑨ 𝐆𝐮𝐥𝐚𝐛𝐢 𝐚𝐧𝐤𝐞𝐧 🌹
+⑩ 𝐣𝐨 𝐭𝐞𝐫𝐢 𝐝𝐞𝐤𝐡𝐢 👀
+⑪ 𝐒𝐡𝐚𝐫𝐚𝐛𝐢 𝐲𝐞 𝐝𝐢𝐥 ❤️
+⑫ 𝐡𝐨 𝐠𝐚𝐲𝐚 ✨
+⑬ 𝐃𝐢𝐥 𝐦𝐞𝐢𝐧 𝐦𝐞𝐫𝐞 ❤️
+⑭ 𝐤𝐰𝐚𝐚𝐛 𝐭𝐞𝐫𝐞 🌙
+⑮ 𝐓𝐚𝐬𝐯𝐞𝐞𝐫 𝐣𝐚𝐢𝐬𝐞 𝐡𝐨 🖼️
+⑯ 𝐝𝐞𝐞𝐰𝐚𝐚𝐫 𝐩𝐞 🏠
+⑰ 𝐓𝐮𝐣𝐩𝐞 𝐟𝐢𝐝𝐚 💘
+⑱ 𝐦𝐚𝐢𝐧 𝐤𝐲𝐮𝐧 𝐡𝐮𝐚 🥀
+⑲ 𝐀𝐚𝐭𝐚 𝐡𝐚𝐢 𝐠𝐮𝐬𝐬𝐚 𝐦𝐮𝐣𝐞 😔
+⑳ 𝐩𝐲𝐚𝐚𝐫 𝐩𝐞 ❤️
+㉑ 𝐌𝐚𝐢𝐧 𝐥𝐮𝐭 𝐠𝐚𝐲𝐚 💔
+㉒ 𝐌𝐚𝐧 𝐤𝐞 𝐝𝐢𝐥 𝐤𝐚 𝐤𝐚𝐡𝐚 💭
+㉓ 𝐌𝐚𝐢𝐧 𝐤𝐚𝐡𝐢𝐧 𝐤𝐚 𝐧𝐚 𝐫𝐚𝐡𝐚 🥀
+㉔ 𝐊𝐲𝐚 𝐤𝐚𝐡𝐮 𝐦𝐚𝐢𝐧 𝐝𝐢𝐥𝐫𝐮𝐛𝐚 💞
+㉕ 𝐁𝐮𝐫𝐚 𝐲𝐞 𝐣𝐚𝐝𝐮 ✨
+㉖ 𝐓𝐞𝐫𝐢 𝐚𝐚𝐧𝐤𝐨𝐧 𝐤𝐚 👀
+㉗ 𝐘𝐞 𝐦𝐞𝐫𝐚 𝐤𝐚𝐚𝐭𝐡𝐢𝐥 🖤
+㉘ 𝐡𝐨 𝐠𝐚𝐲𝐚 💫
+㉙ 𝐆𝐮𝐥𝐚𝐛𝐢 𝐚𝐧𝐤𝐞𝐧 🌹
+㉚ 𝐣𝐨 𝐭𝐞𝐫𝐢 𝐝𝐞𝐤𝐡𝐢 👀
+㉛ 𝐒𝐡𝐚𝐫𝐚𝐛𝐢 𝐲𝐞𝐡 𝐝𝐢𝐥 ❤️
+㉜ 𝐡𝐨 𝐠𝐚𝐲𝐚 ✨`
+            },
+            {
+                id: 6,
+                title: "Pyar Lal",
+                text: `͢¹⎯⃝🌷*এ হে এ হে*⎯͢⎯⃝😜
+⎯͢²⎯⃝🌷*চল হাটা হাটা হাটা*⎯͢⎯⃝🤭
+⎯͢³⎯⃝🌷*এই সব আতেল কথা*⎯͢⎯⃝🤧
+⎯͢⁴⎯⃝🌷*চল 𝐃𝐢𝐥 কি রানি 𝐃𝐨𝐧'𝐭 𝐁𝐞 𝐅𝐮𝐧𝐧𝐲*⎯͢⎯⃝😋
+⎯͢⁵⎯⃝🌷*𝐈 𝐀𝐦 𝐘𝐨𝐮𝐫 রাজা*⎯͢⎯⃝👑
+⎯͢⁶⎯⃝🌷*চল হাটা হাটা হাটা*⎯͢⎯⃝😎
+⎯͢⁷⎯⃝🌷*এই সব আতেল কথা*⎯͢⎯⃝🫠
+⎯͢⁸⎯⃝🌷*চল 𝐃𝐢𝐥 কি রানি 𝐃𝐨𝐧'𝐭 𝐁𝐞 𝐅𝐮𝐧𝐧𝐲*⎯͢⎯⃝😉
+⎯͢⁹⎯⃝🌷*𝐈 𝐀𝐦 𝐘𝐨𝐮𝐫 রাজা*⎯͢⎯⃝🤴
+⎯͢¹⁰⎯⃝🌷*আমার রূপের নজর 𝐇𝐚𝐲𝐞𝐞*⎯͢⎯⃝👀
+⎯͢¹¹⎯⃝🌷*যে আমার রূপের নজর*⎯͢⎯⃝🥵
+⎯͢¹²⎯⃝🌷*বেশি দেবে রূপের চেয়ে*⎯͢⎯⃝💦
+⎯͢¹³⎯⃝🌷*সে আমার 𝐏𝐲𝐚𝐚𝐫 লাল রে*⎯͢⎯⃝😙
+⎯͢¹⁴⎯⃝🌷*𝐏𝐲𝐚𝐚𝐫 লাল রে সে আমার*⎯͢⎯⃝🌚
+⎯͢¹⁵⎯⃝🌷*সে আমার 𝐏𝐲𝐚𝐚𝐫 লাল রে*⎯͢⎯⃝😽`
+            },
+            {
+                id: 7,
+                title: "Ohona",
+                text: `① 𝐎𝐡𝐨𝐧𝐚 ..!! 😌💌
+② 𝐏𝐢𝐜𝐡𝐨𝐧 𝐏𝐡𝐢𝐫𝐞 𝐂𝐚𝐡𝐨 𝐍𝐚 ..!! 🥺🌸
+③ 𝐎𝐡𝐨𝐧𝐚 ..!! 🫶🏻💗
+④ 𝐄𝐤𝐭𝐮 𝐓𝐮𝐦𝐢 𝐇𝐚𝐬𝐨 𝐍𝐚 ..!! 😊💌
+⑤ 𝐎𝐡𝐨𝐧𝐚 ..!! 🥰🌷
+⑥ 𝐊𝐞𝐧𝐨 𝐕𝐚𝐥𝐨𝐛𝐚𝐬𝐨 𝐍𝐚 ..!! 🥺❤️
+⑦ 𝐏𝐫𝐨𝐭𝐡𝐨𝐦 𝐃𝐞𝐤𝐡𝐚𝐭𝐞 𝐀𝐦𝐢 ..!! 👀💘
+⑧ 𝐏𝐫𝐞𝐦𝐞 𝐏𝐨𝐫𝐞𝐜𝐡𝐢 𝐓𝐨𝐦𝐚𝐫 ..!! 🫶🏻💞
+⑨ 𝐃𝐮𝐢 𝐂𝐨𝐤𝐡𝐞 𝐀𝐧𝐝𝐚𝐫 𝐃𝐞𝐤𝐡𝐢 ..!! 🥹💫
+⑩ 𝐆𝐡𝐮𝐦 𝐀𝐬𝐡𝐞 𝐍𝐚 𝐀𝐦𝐚𝐫 ..!! 🌙😌
+⑪ 𝐑𝐚𝐭𝐞𝐫 𝐁𝐞𝐥𝐚 ..!! 🌌💌
+⑫ 𝐒𝐮𝐲𝐞 𝐒𝐮𝐲𝐞 ..!! 😴🌸
+⑬ 𝐒𝐮𝐝𝐡𝐮 𝐕𝐚𝐛𝐢 𝐓𝐨𝐦𝐚𝐲 ..!! 💭💗
+⑭ 𝐊𝐢𝐯𝐚𝐛𝐞 𝐏𝐚𝐛𝐨 𝐀𝐦𝐢 ..!! 🥺💌`
+            },
+            {
+                id: 8,
+                title: "Soulmate (Hai Tu Hi Dil Jaan Meri)",
+                text: `•𓂃 𝐎 𝐂𝐡𝐢𝐭𝐡𝐢 𝐃𝐚𝐨 𝐍𝐚..!! ¹ ✉️💔
+•𓂃 𝐊𝐡𝐨𝐛𝐨𝐫 𝐃𝐚𝐨 𝐍𝐚..!! ² 📩🥀
+•𓂃 𝐁𝐡𝐚𝐥𝐨𝐛𝐚𝐬𝐡𝐚𝐫 𝐊𝐨𝐭𝐡𝐚 𝐊𝐚𝐨 𝐍𝐚..!! ³ 🥹🌸
+•𓂃 𝐁𝐚𝐜𝐡𝐞 𝐍𝐚 𝐏𝐫𝐚𝐧 𝐁𝐚𝐜𝐡𝐞 𝐍𝐚..!! ⁴ 💔🥀
+•𓂃 𝐊𝐨𝐭𝐡𝐚 𝐂𝐡𝐢𝐥𝐨 𝐀𝐦𝐚𝐫 𝐇𝐨𝐛𝐞..!! ⁵ 🥺💫
+•𓂃 𝐒𝐮𝐤𝐡𝐞-𝐃𝐮𝐤𝐡𝐞 𝐏𝐚𝐬𝐡𝐞 𝐑𝐨𝐛𝐞..!! ⁶ 🤲🏻💖
+•𓂃 𝐊𝐨𝐫𝐨 𝐍𝐚 𝐀𝐫 𝐁𝐚𝐡𝐚𝐧𝐚..!! ⁷ 🥀🚶🏻‍♂️
+•𓂃 𝐊𝐞𝐭𝐞 𝐊𝐞𝐭𝐞 𝐉𝐚𝐲 𝐃𝐢𝐧 𝐑𝐨𝐣𝐨𝐧𝐢..!! ⁸ 🌅🌙
+•𓂃 𝐀𝐬𝐡𝐢 𝐀𝐬𝐡𝐢 𝐁𝐨𝐥𝐞 𝐀𝐫 𝐀𝐬𝐡𝐨𝐧𝐢..!! ⁹ 🥺💔
+•𓂃 𝐁𝐨𝐥𝐞 𝐁𝐨𝐥𝐞 𝐋𝐨𝐤𝐞 𝐏𝐚𝐠𝐨𝐥𝐢..!! ¹⁰ 🫠💭
+•𓂃 𝐏𝐚𝐠𝐨𝐥 𝐀𝐦𝐢 𝐍𝐨𝐲..!! ¹¹ 💔🚶🏻‍♀️
+•𓂃 𝐁𝐨𝐧𝐝𝐡𝐮 𝐊𝐨𝐢, 𝐊𝐨𝐢, 𝐊𝐨𝐢..!! ¹² 🥺🥀`
+            },
+            {
+                id: 9,
+                title: "O Lovely",
+                text: `⎯͢⎯⃝১🌷এ সুন্দরী..!!⎯͢⎯⃝🌻
+⎯͢⎯⃝২🌷আল্টা নুরি গাছের কুরী..!!⎯͢⎯⃝🍂
+⎯͢⎯⃝৩🌷বউ পুতুলের বিয়া..!!⎯͢⎯⃝🎎
+⎯͢⎯⃝৪🌷এখন কেন কান্দিস লো সই..!!⎯͢⎯⃝🤧
+⎯͢⎯⃝৫🌷গামচা মুড়ি দিয়া..!!⎯͢⎯⃝🪷
+⎯͢⎯⃝৬🌷আলুর পাকে শানুরে..!!⎯͢⎯⃝💗
+⎯͢⎯⃝৭🌷ভেলা পাতার দোহিক..!!⎯͢⎯⃝🍯
+⎯͢⎯⃝৮🌷সবার জামাই আইলো ঘরে..!!⎯͢⎯⃝🏡
+⎯͢⎯⃝৯🌷আমার জামাই কই..!!⎯͢⎯⃝😫
+⎯͢⎯⃝১০🌷আমার জামাই কই..!!⎯͢⎯⃝🤭
+⎯͢⎯⃝১১🌷ভালোবেসে সখি..!!⎯͢⎯⃝🥰
+⎯͢⎯⃝১২🌷ভাষা লিপিরিতে..!!⎯͢⎯⃝🫠
+⎯͢⎯⃝১৩🌷গোলেমালে পাকনা মিলেছি..!!⎯͢⎯⃝💐
+⎯͢⎯⃝১৪🌷বসে গেছি সূজা..!!⎯͢⎯⃝🍃
+⎯͢⎯⃝১৫🌷বিয়ে রে পিড়িতে..!!⎯͢⎯⃝👰
+⎯͢⎯⃝১৬🌷তোকে নিয়ে সেলফি তুলেছি..!!⎯͢⎯⃝🤳🏻
+⎯͢⎯⃝১৭🌷আমি ক্যাবলা ছেলে..!!⎯͢⎯⃝🎭
+⎯͢⎯⃝১৮🌷তোকে সঙ্গে পেলে..!!⎯͢⎯⃝🫂
+⎯͢⎯⃝১৯🌷ভাজা মাছ উলটে খাবো..!!⎯͢⎯⃝🥵
+⎯͢⎯⃝২০🌷রে.......!!⎯͢⎯⃝💛
+⎯͢⎯⃝২১🌷ও লাভলী..!!⎯͢⎯⃝🙌`
+            },
+            {
+                id: 10,
+                title: "Kochi Dalim",
+                text: `𓋜 রাতে যে আমার বাড়ি 🌙🏚️
+𓋜দিচ্ছে যে হানা🙄
+𓋜ছোড়াদের যে ঝাঁদ ভোরে না 🥴
+𓋜দেখছে বেদনা👀
+𓋜রাতে যে আমার বাড়ি 🌙
+𓋜দিচ্ছে যে হানা🫩
+𓋜ছোড়াদের যে ঝাঁদ ভোরে না😟
+𓋜দেখছে বেদনা 👀
+𓋜এই কচি ডালিম😯
+𓋜আমি এখন 😫
+𓋜রাখবো কি করে🤧
+𓋜এই কচি ডালিম 🤤
+𓋜আমি এখন 😐
+𓋜রাখবো কি করে😶
+𓋜আসি তোলে তোলে😒
+বেদানা ফাইতে যাবে ফাইতে যাবে রে🥵😝
+𓋜বেশি পেকে গেলে 😋`
+            },
+            {
+                id: 11,
+                title: "Ei Phaguni Purnima Rate",
+                text: `⎯‌♡ ① 𝐉𝐞𝐧𝐨 𝐃𝐡𝐚𝐤𝐚 𝐀𝐜𝐡𝐞...!! 🎀
+⎯‌♡ ② 𝐀𝐫 𝐊𝐚𝐭𝐡𝐢 𝐍𝐚𝐢...!! 🦋
+⎯‌♡ ③ 𝐓𝐨𝐫𝐞 𝐂𝐡𝐡𝐚𝐫𝐚 𝐀𝐦𝐚𝐫...!! 💗
+⎯‌♡ ④ 𝐇𝐚𝐚𝐥𝐭𝐚𝐨 𝐓𝐚𝐢...!! 🌸
+⎯‌♡ ⑤ 𝐁𝐡𝐚𝐛𝐮𝐤 𝐉𝐚 𝐊𝐡𝐮𝐬𝐡𝐢...!! 🫶🏻
+⎯‌♡ ⑥ 𝐒𝐡𝐨𝐛𝐚𝐢.....!! 🎀
+⎯‌♡ ⑦ 𝐀𝐣 𝐅𝐚𝐠𝐮𝐧𝐢...!! 🌷
+⎯‌♡ ⑧ 𝐏𝐮𝐫𝐧𝐢𝐦𝐚 𝐑𝐚𝐭𝐞...!! 🌙
+⎯‌♡ ⑨ 𝐂𝐡𝐨𝐥 𝐏𝐚𝐥𝐚𝐲𝐞 𝐉𝐚𝐢...!! 🦋
+⎯‌♡ ⑩ 𝐄𝐢 𝐅𝐚𝐠𝐮𝐧𝐢...!! 💗
+⎯‌♡ ⑪ 𝐏𝐮𝐫𝐧𝐢𝐦𝐚 𝐑𝐚𝐭𝐞...!! 🎀
+⎯‌♡ ⑫ 𝐂𝐡𝐨𝐥 𝐏𝐚𝐥𝐚𝐲𝐞 𝐉𝐚𝐢...!! 🌸
+⎯‌♡ ⑬ 𝐓𝐨𝐫 𝐃𝐞𝐬𝐡𝐞...!! 🦋
+⎯‌♡ ⑭ 𝐁𝐚𝐬𝐡𝐚 𝐁𝐚𝐧𝐚𝐛𝐨𝐫𝐞...!! 💞
+⎯‌♡ ⑮ 𝐓𝐡𝐚𝐤𝐛𝐨 𝐃𝐮𝐣𝐨𝐧𝐞 𝐄𝐤𝐬𝐚𝐭𝐡𝐞...!! 🎀
+⎯‌♡ ⑯ 𝐄𝐢 𝐅𝐚𝐠𝐮𝐧𝐢 𝐏𝐮𝐫𝐧𝐢𝐦𝐚 𝐑𝐚𝐭𝐞...!! 🌙
+⎯‌♡ ⑰ 𝐂𝐡𝐨𝐥 𝐏𝐚𝐥𝐚𝐲𝐞 𝐉𝐚𝐢...!! 🦋`
+            },
+            {
+                id: 12,
+                title: "Amer Achar",
+                text: `⋆˙⟡𓂃BONDHUR AMER BAGAN CHAR...!!🥭😜
+✿🍒𓂃AMAR POCHONDER KHABAR...!!😋🥰
+𓍯𓂃LOIYA AISHO BANAIYA TUMI...!!🫡🥳
+𖹭 ֶָ֢𓂃AMERI ACHAR...!!🥹🥰
+❀𓂃BONDHUR AMER BAGAN CHAR...!!🥭😜
+𐙚  𓂃AMAR POCHONDER KHABAR...!!😋🥰
+❀𓂃LOIYA AISHO BANAIYA TUMI...!! 🙂🫵🏻
+𖹭 ֶָ֢𓂃AMERI ACHAR...!!🥹🤭
+𐙚  𓂃TOR LAIGA ANUM AMI...!!🫶🏻❤️‍🩹
+☆𓂃HIMSAGORER AM...!!🫠🥰
+✰𓂃ANTE NA PARLE DIMU...!!😜😩
+𓂃 𓈒𓏸JWALAIYA BAGAN...!!🐸🤐
+𓁇𓁋𓂃CHOLO TUMI AMI GHURE ASHI...!!🤌🏻🫶🏻
+𓍼ོ𓂃BENAROS...!!😘🤗
+˖᯽ ݁˖__SHUDHU AM NA ARO ACHE...!!😉✨
+☘︎𓂃ANAROS...!!🤗😋
+ᥫ᭡️𓂃JA CHAIBA TOMAY AMI TAI DIMU...!!🫠🥰
+☘︎𓂃BOLO KHAIBA BONDHU TUMI KON ROS..!!🥹🥰`
+            },
+            {
+                id: 13,
+                title: "Tumi Ashe Pashe Thakle",
+                text: `① ──❥ Chad utheche ..!! 🌸💗
+② ──❥ Phul futeche ..!! 🌷🥰
+③ ──❥ Kodom tolai ke ..!! 🥀❤️
+④ ──❥ Hati nachche ghora nachche ..!! 🫶🌸
+⑤ ──❥ Sonamonir biye ..!! 💍💗
+⑥ ──❥ Chad utheche ..!! 🌙🥰
+⑦ ──❥ Phul futeche ..!! 🌷💞
+⑧ ──❥ Kodom tolai ke ..!! 🥀🫶
+⑨ ──❥ Hati nachche ghora nachche ..!! 🐘💗
+⑩ ──❥ Sonamonir biye ..!! 💍🌸
+⑪ ──❥ Tumi ashe pashe thakle hay ..!! 🥺❤️
+⑫ ──❥ Tumi ashe pashe thakle ..!! 🫶💗
+⑬ ──❥ Koto khushi khushi thakchi ..!! 🥰🌷
+⑭ ──❥ Ar jacchi bhule ..!! 💞🥀
+⑮ ──❥ Ami ke kothay ..!! 🥺❤️
+⑯ ──❥ Tumi olposwolpo chaile ..!! 💗🫶
+⑰ ──❥ Aro ektu beshi thakchi ..!! 🥰💞
+⑱ ──❥ Ar khamkheyali akchi ..!! 🌸❤️
+⑲ ──❥ Shara gaye ..!! 🫶🌷
+⑳ ──❥ Ei din jodi na thame ..!! 🥺💗
+㉑ ──❥ Raat jodi na shesh hoy ..!! 🌙❤️
+㉒ ──❥ Tumi nilche kono khame ..!! 💌🥰
+㉓ ──❥ Amay morale besh hoy ..!! 🫶💞
+㉔ ──❥ Pore jacchi jeno tomari neshay ..!! ❤️‍🩹🌸
+㉕ ──❥ Tumi ashe pashe thakle ..!! 🥺💗
+㉖ ──❥ Koto khushi khushi thakchi ..!! 🥰🌷
+㉗ ──❥ Ar jacchi bhule ..!! 💞❤️
+㉘ ──❥ Ami ke kothay ..!! 🥺🫶
+㉙ ──❥ Tumi olposwolpo chaile ..!! 💗🌸
+㉚ ──❥ Aro ektu beshi thakchi ..!! 🥰💞
+㉛ ──❥ Ar khamkheyali akchi ..!! 🌷❤️
+㉜ ──❥ Shara gaye ..!! 🫶💗`
+            },
+            {
+                id: 14,
+                title: "O Chithi Dao Na",
+                text: `•𓂃 𝐎 𝐂𝐡𝐢𝐭𝐡𝐢 𝐃𝐚𝐨 𝐍𝐚..!! ¹ ✉️💔
+•𓂃 𝐊𝐡𝐨𝐛𝐨𝐫 𝐃𝐚𝐨 𝐍𝐚..!! ² 📩🥀
+•𓂃 𝐁𝐡𝐚𝐥𝐨𝐛𝐚𝐬𝐡𝐚𝐫 𝐊𝐨𝐭𝐡𝐚 𝐊𝐚𝐨 𝐍𝐚..!! ³ 🥹🌸
+•𓂃 𝐁𝐚𝐜𝐡𝐞 𝐍𝐚 𝐏𝐫𝐚𝐧 𝐁𝐚𝐜𝐡𝐞 𝐍𝐚..!! ⁴ 💔🥀
+•𓂃 𝐊𝐨𝐭𝐡𝐚 𝐂𝐡𝐢𝐥𝐨 𝐀𝐦𝐚𝐫 𝐇𝐨𝐛𝐞..!! ⁵ 🥺💫
+•𓂃 𝐒𝐮𝐤𝐡𝐞-𝐃𝐮𝐤𝐡𝐞 𝐏𝐚𝐬𝐡𝐞 𝐑𝐨𝐛𝐞..!! ⁶ 🤲🏻💖
+•𓂃 𝐊𝐨𝐫𝐨 𝐍𝐚 𝐀𝐫 𝐁𝐚𝐡𝐚𝐧𝐚..!! ⁷ 🥀🚶🏻‍♂️
+•𓂃 𝐊𝐞𝐭𝐞 𝐊𝐞𝐭𝐞 𝐉𝐚𝐲 𝐃𝐢𝐧 𝐑𝐨𝐣𝐨𝐧𝐢..!! ⁸ 🌅🌙
+•𓂃 𝐀𝐬𝐡𝐢 𝐀𝐬𝐡𝐢 𝐁𝐨𝐥𝐞 𝐀𝐫 𝐀𝐬𝐡𝐨𝐧𝐢..!! ⁹ 🥺💔
+•𓂃 𝐁𝐨𝐥𝐞 𝐁𝐨𝐥𝐞 𝐋𝐨𝐤𝐞 𝐏𝐚𝐠𝐨𝐥𝐢..!! ¹⁰ 🫠💭
+•𓂃 𝐏𝐚𝐠𝐨𝐥 𝐀𝐦𝐢 𝐍𝐨𝐲..!! ¹¹ 💔🚶🏻‍♀️
+•𓂃 𝐁𝐨𝐧𝐝𝐡𝐮 𝐊𝐨𝐢, 𝐊𝐨𝐢, 𝐊𝐨𝐢..!! ¹² 🥺🥀`
+            },
+            {
+                id: 15,
+                title: "Patar Bashori",
+                text: `•𓂃আগুনে জ্বলি...!!😩🥀
+•𓂃আমি কি করে বলি...!!🥹🌷
+•𓂃হারালে কি খুঁজে পাবো মন..!!🫠❤️‍🩹
+•𓂃বাশি আমারে কেবল..!!👀💘
+•𓂃মারে বিরহ ছোবল..!! 😣💓
+•𓂃বাশি আমারে কেবল..!!👀💫
+•𓂃মারে বিরহ ছোবল..!! 😣💟
+•𓂃কেন কানা মাছি কেন..?? 😟💥
+•𓂃এত জ্বালাতন..!!😞❤️‍🩹
+•𓂃পাতার বাশরী...!! ☘️👀🤞🏻
+•𓂃পায়েতে ধরি...!! 🫠✨
+•𓂃বেজো না বেজো না এ মন..!!😌💗`
+            },
+            {
+                id: 16,
+                title: "Nagin Dance",
+                text: `•𓂃 𝐒𝐡𝐚𝐠𝐚𝐧𝐚 𝐃𝐢 𝐑𝐚𝐚𝐭 𝐑𝐚𝐚𝐭..!! ¹ 🌙🎉
+•𓂃 𝐒𝐚𝐣𝐧𝐚 𝐉𝐞𝐞 𝐇𝐨𝐭 𝐇𝐨𝐭..!! ² 🔥💖
+•𓂃 𝐒𝐡𝐚𝐠𝐚𝐧𝐚 𝐃𝐢 𝐑𝐚𝐚𝐭 𝐑𝐚𝐚𝐭..!! ³ 🌙🎉
+•𓂃 𝐒𝐚𝐣𝐧𝐚 𝐉𝐞𝐞 𝐇𝐨𝐭 𝐇𝐨𝐭..!! ⁴ 🔥💖
+•𓂃 𝐍𝐚𝐲𝐧𝐚 𝐕𝐢𝐜𝐡 𝐒𝐚𝐣𝐧𝐚 𝐃𝐞..!! ⁵ 👀❤️
+•𓂃 𝐋𝐚𝐚𝐲𝐢 𝐉𝐚𝐚𝐯𝐚 𝐒𝐡𝐨𝐭 𝐖𝐨𝐭..!! ⁶ 🥂✨
+•𓂃 𝐌𝐚𝐢𝐧 𝐁𝐚𝐥𝐤𝐡𝐚𝐚𝐯𝐚𝐧𝐛𝐚..!! ⁷ 💃🏻✨
+•𓂃 𝐇𝐚𝐭𝐡 𝐍𝐚 𝐀𝐚𝐯𝐚..!! ⁸ 🖐🏻❌
+•𓂃 𝐌𝐚𝐢𝐧 𝐁𝐚𝐥𝐤𝐡𝐚𝐚𝐯𝐚𝐧𝐛𝐚..!! ⁹ 💃🏻✨
+•𓂃 𝐇𝐚𝐭𝐡 𝐍𝐚 𝐀𝐚𝐯𝐚..!! ¹⁰ 🖐🏻❌
+•𓂃 𝐘𝐚𝐚𝐫 𝐌𝐞𝐧𝐞 𝐓𝐨 𝐁𝐚𝐜𝐡𝐧𝐚..!! ¹¹ 🙈💫
+•𓂃 𝐌𝐚𝐢𝐧 𝐍𝐚𝐠𝐢𝐧 𝐍𝐚𝐠𝐢𝐧..!! ¹² 🐍✨
+•𓂃 𝐍𝐚𝐠𝐢𝐧 𝐍𝐚𝐠𝐢𝐧..!! ¹³ 🐍💫
+•𓂃 𝐍𝐚𝐠𝐢𝐧 𝐃𝐚𝐧𝐜𝐞 𝐍𝐚𝐜𝐡𝐧𝐚..!! ¹⁴ 💃🏻🎶
+•𓂃 𝐌𝐚𝐢𝐧 𝐍𝐚𝐠𝐢𝐧 𝐍𝐚𝐠𝐢𝐧..!! ¹⁵ 🐍✨
+•𓂃 𝐍𝐚𝐠𝐢𝐧 𝐍𝐚𝐠𝐢𝐧..!! ¹⁶ 🐍💫
+•𓂃 𝐍𝐚𝐠𝐢𝐧 𝐃𝐚𝐧𝐜𝐞 𝐍𝐚𝐜𝐡𝐧𝐚..!! ¹⁷ 💃🏻🎶`
+            }
+        ];
+
+        function renderLyrics(data) {
+            const container = document.getElementById('lyricsGrid');
+            container.innerHTML = '';
+            
+            data.forEach(item => {
+                const card = document.createElement('div');
+                card.className = 'lyric-card';
+                card.innerHTML = `
+                    <div>
+                        <div class="lyric-title">${item.title}</div>
+                        <div class="lyric-preview">${item.text}</div>
+                    </div>
+                    <button class="copy-btn" onclick="copyLyrics('${item.id}')">Copy Lyrics</button>
+                `;
+                container.appendChild(card);
+            });
         }
-    ];
 
-    const folderContainer = document.getElementById('folder-list');
+        function copyLyrics(id) {
+            const selected = lyricsData.find(item => item.id == id);
+            if (selected) {
+                navigator.clipboard.writeText(selected.text).then(() => {
+                    showToast();
+                });
+            }
+        }
 
-    lyricsData.forEach((data, index) => {
-        const div = document.createElement('div');
-        div.className = 'folder-card';
-        div.onclick = () => openLyrics(index);
+        function showToast() {
+            const toast = document.getElementById('toast');
+            toast.style.display = 'block';
+            setTimeout(() => {
+                toast.style.display = 'none';
+            }, 2000);
+        }
 
-        div.innerHTML = `
-            <div class="folder-info">
-                <h3>📁 ${data.title}</h3>
-                <p>${data.subtitle}</p>
-            </div>
-            <span class="open-icon">➔</span>
-        `;
-        folderContainer.appendChild(div);
-    });
+        function filterLyrics() {
+            const query = document.getElementById('searchInput').value.toLowerCase();
+            const filtered = lyricsData.filter(item => 
+                item.title.toLowerCase().includes(query) || 
+                item.text.toLowerCase().includes(query)
+            );
+            renderLyrics(filtered);
+        }
 
-    function openLyrics(index) {
-        const item = lyricsData[index];
-        document.getElementById('modalTitle').innerText = item.title + " - " + item.subtitle;
-        
-        const container = document.getElementById('lyricsContainer');
-        container.innerHTML = '';
-
-        item.lines.forEach(text => {
-            const lyricDiv = document.createElement('div');
-            lyricDiv.className = 'lyric-card';
-            lyricDiv.onclick = () => copyText(text);
-
-            lyricDiv.innerHTML = `
-                <span class="lyric-text">${text}</span>
-                <button class="copy-btn">কপি</button>
-            `;
-            container.appendChild(lyricDiv);
-        });
-
-        document.getElementById('lyricsModal').style.display = 'flex';
-    }
-
-    function closeModal() {
-        document.getElementById('lyricsModal').style.display = 'none';
-    }
-
-    function copyText(text) {
-        navigator.clipboard.writeText(text);
-        alert('কপি হয়েছে: ' + text);
-    }
-</script>
-
+        // Initial Load
+        renderLyrics(lyricsData);
+    </script>
 </body>
 </html>
