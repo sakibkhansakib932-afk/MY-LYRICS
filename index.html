@@ -4,355 +4,118 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>LYRICS Touch To Copy</title>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
         * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: Arial, sans-serif;
         }
-
         body {
-            background-color: #f7f6fb;
-            color: #333;
+            background-color: #f4f6f9;
+            padding: 15px;
             display: flex;
             justify-content: center;
-            min-height: 100vh;
-            padding: 20px 10px;
         }
-
-        .app-container {
+        .container {
             width: 100%;
             max-width: 500px;
             background: #ffffff;
-            border-radius: 16px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.08);
-            overflow: hidden;
-            display: flex;
-            flex-direction: column;
-        }
-
-        header {
-            background: linear-gradient(135deg, #6ea8fe, #a78bfa);
-            color: #fff;
-            padding: 24px 20px;
-            text-align: center;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
-        }
-
-        header h1 {
-            font-size: 1.5rem;
-            font-weight: 700;
-            margin-bottom: 6px;
-        }
-
-        header p {
-            font-size: 0.85rem;
-            opacity: 0.9;
-        }
-
-        .search-box {
-            padding: 16px 20px;
-            background: #fff;
-            border-bottom: 1px solid #f0f0f0;
-        }
-
-        .search-box input {
-            width: 100%;
-            padding: 12px 16px;
-            border: 1px solid #e2e8f0;
-            border-radius: 20px;
-            outline: none;
-            font-size: 0.95rem;
-            transition: all 0.3s;
-        }
-
-        .search-box input:focus {
-            border-color: #8b5cf6;
-            box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.15);
-        }
-
-        .song-list {
-            list-style: none;
-            padding: 10px 16px;
-            flex-grow: 1;
-        }
-
-        .song-card {
-            background: #fdfdfd;
-            border: 1px solid #f1f5f9;
             border-radius: 12px;
-            padding: 14px 16px;
-            margin-bottom: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            cursor: pointer;
-            transition: transform 0.2s, box-shadow 0.2s;
+            padding: 15px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
         }
-
-        .song-card:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
-            background: #fff;
-        }
-
-        .song-info {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .song-icon {
-            width: 40px;
-            height: 40px;
-            background: #f3e8ff;
-            color: #8b5cf6;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.1rem;
-        }
-
-        .song-details h3 {
-            font-size: 1rem;
-            color: #1e293b;
-        }
-
-        .song-details p {
-            font-size: 0.8rem;
-            color: #64748b;
-        }
-
-        .modal {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.5);
-            display: none;
-            justify-content: center;
-            align-items: flex-end;
-            z-index: 100;
-        }
-
-        .modal.active {
-            display: flex;
-        }
-
-        .modal-content {
-            background: #fff;
-            width: 100%;
-            max-width: 500px;
-            max-height: 85vh;
-            border-top-left-radius: 20px;
-            border-top-right-radius: 20px;
-            padding: 20px;
-            display: flex;
-            flex-direction: column;
-            animation: slideUp 0.3s ease-out;
-        }
-
-        @keyframes slideUp {
-            from { transform: translateY(100%); }
-            to { transform: translateY(0); }
-        }
-
-        .modal-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding-bottom: 12px;
-            border-bottom: 1px solid #f1f5f9;
-        }
-
-        .modal-header h2 {
+        h2 {
+            text-align: center;
+            color: #4a154b;
+            margin-bottom: 15px;
             font-size: 1.2rem;
-            color: #0f172a;
         }
-
-        .close-btn {
-            background: none;
-            border: none;
-            font-size: 1.5rem;
-            color: #64748b;
-            cursor: pointer;
-        }
-
-        .lyrics-container {
-            overflow-y: auto;
-            margin-top: 14px;
-            padding-right: 6px;
-        }
-
-        .lyric-item {
+        .lyric-card {
+            background: #f9f9f9;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 12px;
+            margin-bottom: 8px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 10px 12px;
-            background: #f8fafc;
-            border-radius: 8px;
-            margin-bottom: 8px;
-            font-size: 0.92rem;
-            color: #334155;
             cursor: pointer;
-            transition: background 0.2s;
         }
-
-        .lyric-item:hover {
-            background: #f1f5f9;
+        .lyric-card:hover {
+            background: #f0f0f0;
         }
-
+        .lyric-text {
+            font-size: 0.95rem;
+            color: #333;
+            word-break: break-word;
+        }
         .copy-btn {
-            background: #8b5cf6;
-            color: #fff;
+            background: #6b21a8;
+            color: white;
             border: none;
             padding: 6px 12px;
-            border-radius: 6px;
+            border-radius: 5px;
             font-size: 0.8rem;
             cursor: pointer;
-            display: flex;
-            align-items: center;
-            gap: 4px;
-        }
-
-        .copy-btn:hover {
-            background: #7c3aed;
+            margin-left: 10px;
+            white-space: nowrap;
         }
     </style>
 </head>
 <body>
 
-<div class="app-container">
-    <header>
-        <h1><i class="fa-solid => music"></i> My Lyrics Collection</h1>
-        <p>যেকোনো লাইনে স্পর্শ করেই কপি করুন</p>
-    </header>
-
-    <div class="search-box">
-        <input type="text" id="searchInput" placeholder="গান খুঁজুন..." onkeyup="filterSongs()">
-    </div>
-
-    <ul class="song-list" id="songList">
-        <!-- Songs generated via JS -->
-    </ul>
-</div>
-
-<div class="modal" id="lyricsModal">
-    <div class="modal-content">
-        <div class="modal-header">
-            <h2 id="modalTitle">গান</h2>
-            <button class="close-btn" onclick="closeModal()">&times;</button>
-        </div>
-        <div class="lyrics-container" id="lyricsContainer">
-            <!-- Lyrics lines generated via JS -->
-        </div>
-    </div>
+<div class="container">
+    <h2>কাজল কালো দুটি চোখে</h2>
+    <div id="lyrics-list"></div>
 </div>
 
 <script>
-    const songs = [
-        {
-            title: "কাজল কালো দুটি চোখে",
-            artist: "Bangla Song",
-            items: [
-                "➺❥⃟1কাজল কালো দুটি চোখে⸙❥︎𝄟≛⃝🥰",
-                "➺❥⃟2সে যখনই আমায় দেখে⸙❥︎𝄟≛⃝🎀",
-                "➺❥⃟3পড়েনা চোখেতে পলক⸙❥︎𝄟≛⃝💓",
-                "➺❥⃟4আর আসেনা কথা মুখে⸙❥︎𝄟≛⃝🥀",
-                "➺❥⃟5কাজল কালো দুটি চোখে⸙❥︎𝄟≛⃝🥰",
-                "➺❥⃟6সে যখনই আমায় দেখে⸙❥︎𝄟≛⃝🎀",
-                "➺❥⃟7পড়েনা চোখেতে পলক⸙❥︎𝄟≛⃝💓",
-                "➺❥⃟8আর আসেনা কথা মুখে⸙❥︎𝄟≛⃝🥀",
-                "➺❥⃟9তার চলে যাওয়া⸙❥︎𝄟≛⃝",
-                "➺❥⃟10ফিরে একটু চাওয়া⸙❥︎𝄟≛⃝🥀",
-                "➺❥⃟11এই বুকেতে⸙❥︎𝄟≛⃝🤍",
-                "➺❥⃟12ঝড় তুলে যায়⸙❥︎𝄟≛⃝☺️",
-                "➺❥⃟13যার ছবি এই⸙❥︎𝄟≛⃝🥀",
-                "➺❥⃟14মন এঁকে যায়⸙❥︎𝄟≛⃝💓",
-                "➺❥⃟15যার কথা ভেবে⸙❥︎𝄟≛⃝💝",
-                "➺❥⃟16দিন কেটে যায়⸙❥︎𝄟≛⃝🥀",
-                "➺❥⃟17সে কি জানে শুধু তাকে⸙❥︎𝄟≛⃝🌷",
-                "➺❥⃟18ভালোবাসে আমার হৃদয়⸙❥︎𝄟≛⃝🎀",
-                "➺❥⃟19যার ছবি এই ⸙❥︎𝄟≛⃝🥀",
-                "➺❥⃟20মন এঁকে যায়⸙❥︎𝄟≛⃝💓"
-            ]
-        }
+    const lines = [
+        "➺❥⃟1কাজল কালো দুটি চোখে⸙❥︎𝄟≛⃝🥰",
+        "➺❥⃟2সে যখনই আমায় দেখে⸙❥︎𝄟≛⃝🎀",
+        "➺❥⃟3পড়েনা চোখেতে পলক⸙❥︎𝄟≛⃝💓",
+        "➺❥⃟4আর আসেনা কথা মুখে⸙❥︎𝄟≛⃝🥀",
+        "➺❥⃟5কাজল কালো দুটি চোখে⸙❥︎𝄟≛⃝🥰",
+        "➺❥⃟6সে যখনই আমায় দেখে⸙❥︎𝄟≛⃝🎀",
+        "➺❥⃟7পড়েনা চোখেতে পলক⸙❥︎𝄟≛⃝💓",
+        "➺❥⃟8আর আসেনা কথা মুখে⸙❥︎𝄟≛⃝🥀",
+        "➺❥⃟9তার চলে যাওয়া⸙❥︎𝄟≛⃝",
+        "➺❥⃟10ফিরে একটু চাওয়া⸙❥︎𝄟≛⃝🥀",
+        "➺❥⃟11এই বুকেতে⸙❥︎𝄟≛⃝🤍",
+        "➺❥⃟12ঝড় তুলে যায়⸙❥︎𝄟≛⃝☺️",
+        "➺❥⃟13যার ছবি এই⸙❥︎𝄟≛⃝🥀",
+        "➺❥⃟14মন এঁকে যায়⸙❥︎𝄟≛⃝💓",
+        "➺❥⃟15যার কথা ভেবে⸙❥︎𝄟≛⃝💝",
+        "➺❥⃟16দিন কেটে যায়⸙❥︎𝄟≛⃝🥀",
+        "➺❥⃟17সে কি জানে শুধু তাকে⸙❥︎𝄟≛⃝🌷",
+        "➺❥⃟18ভালোবাসে আমার হৃদয়⸙❥︎𝄟≛⃝🎀",
+        "➺❥⃟19যার ছবি এই ⸙❥︎𝄟≛⃝🥀",
+        "➺❥⃟20মন এঁকে যায়⸙❥︎𝄟≛⃝💓"
     ];
 
-    function renderList() {
-        const list = document.getElementById('songList');
-        list.innerHTML = '';
-        songs.forEach((song, index) => {
-            const li = document.createElement('li');
-            li.className = 'song-card';
-            li.onclick = () => openModal(index);
-            li.innerHTML = `
-                <div class="song-info">
-                    <div class="song-icon"><i class="fa-solid fa-music"></i></div>
-                    <div class="song-details">
-                        <h3>${song.title}</h3>
-                        <p>${song.artist}</p>
-                    </div>
-                </div>
-                <i class="fa-solid fa-chevron-right" style="color: #cbd5e1;"></i>
-            `;
-            list.appendChild(li);
-        });
-    }
+    const container = document.getElementById('lyrics-list');
 
-    function filterSongs() {
-        const query = document.getElementById('searchInput').value.toLowerCase();
-        const cards = document.querySelectorAll('.song-card');
-        songs.forEach((song, i) => {
-            if (song.title.toLowerCase().includes(query) || song.artist.toLowerCase().includes(query)) {
-                cards[i].style.display = 'flex';
-            } else {
-                cards[i].style.display = 'none';
-            }
-        });
-    }
+    lines.forEach(text => {
+        const div = document.createElement('div');
+        div.className = 'lyric-card';
+        div.onclick = () => copyText(text);
 
-    function openModal(index) {
-        const file = songs[index];
-        document.getElementById('modalTitle').innerText = file.title;
-        const lyricsContainer = document.getElementById('lyricsContainer');
-        lyricsContainer.innerHTML = '';
-
-        file.items.forEach(lyric => {
-            const div = document.createElement('div');
-            div.className = 'lyric-item';
-            div.onclick = () => copyText(lyric);
-            div.innerHTML = `
-                <span>${lyric}</span>
-                <button class="copy-btn"><i class="fa-regular fa-copy"></i> কপি</button>
-            `;
-            lyricsContainer.appendChild(div);
-        });
-
-        document.getElementById('lyricsModal').classList.add('active');
-    }
-
-    function closeModal() {
-        document.getElementById('lyricsModal').classList.remove('active');
-    }
+        div.innerHTML = `
+            <span class="lyric-text">${text}</span>
+            <button class="copy-btn">কপি</button>
+        `;
+        container.appendChild(div);
+    });
 
     function copyText(text) {
         navigator.clipboard.writeText(text);
         alert('কপি হয়েছে: ' + text);
     }
-
-    renderList();
 </script>
+
 </body>
-</html>        if(name) {
-            lyricsFiles.push({
-                id: Date.now(),
-                title: name,
-                items: []
+</html>     items: []
             });
             renderList();
         }
