@@ -22,15 +22,102 @@
             max-width: 500px;
             background: #ffffff;
             border-radius: 12px;
-            padding: 15px;
+            padding: 20px;
             box-shadow: 0 4px 10px rgba(0,0,0,0.1);
         }
         h2 {
             text-align: center;
             color: #4a154b;
-            margin-bottom: 15px;
-            font-size: 1.2rem;
+            margin-bottom: 20px;
+            font-size: 1.3rem;
         }
+        
+        /* Folder Card Style */
+        .folder-card {
+            background: linear-gradient(135deg, #f3e8ff, #ffffff);
+            border: 1px solid #d8b4fe;
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+        .folder-card:hover {
+            transform: translateY(-2px);
+            background: #f3e8ff;
+        }
+        .folder-info h3 {
+            font-size: 1.1rem;
+            color: #6b21a8;
+        }
+        .folder-info p {
+            font-size: 0.85rem;
+            color: #666;
+            margin-top: 3px;
+        }
+        .open-icon {
+            font-size: 1.2rem;
+            color: #6b21a8;
+            font-weight: bold;
+        }
+
+        /* Modal Box */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            justify-content: center;
+            align-items: center;
+            padding: 15px;
+            z-index: 1000;
+        }
+        .modal-content {
+            background: white;
+            width: 100%;
+            max-width: 480px;
+            max-height: 85vh;
+            border-radius: 12px;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #eee;
+            margin-bottom: 15px;
+        }
+        .modal-header h3 {
+            color: #4a154b;
+            font-size: 1.1rem;
+        }
+        .close-btn {
+            background: #e5e7eb;
+            border: none;
+            font-size: 1.2rem;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            cursor: pointer;
+            color: #333;
+        }
+        .lyrics-list {
+            overflow-y: auto;
+            flex-grow: 1;
+            padding-right: 5px;
+        }
+
+        /* Lyric Items */
         .lyric-card {
             background: #f9f9f9;
             border: 1px solid #e0e0e0;
@@ -66,47 +153,101 @@
 <body>
 
 <div class="container">
-    <h2>কাজল কালো দুটি চোখে</h2>
-    <div id="lyrics-list"></div>
+    <h2>🎵 লিরিক্স ফাইল তালিকা</h2>
+    <div id="folder-list"></div>
+</div>
+
+<!-- Modal -->
+<div class="modal" id="lyricsModal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3 id="modalTitle">Lyrics</h3>
+            <button class="close-btn" onclick="closeModal()">✕</button>
+        </div>
+        <div class="lyrics-list" id="lyricsContainer"></div>
+    </div>
 </div>
 
 <script>
-    const lines = [
-        "➺❥⃟1কাজল কালো দুটি চোখে⸙❥︎𝄟≛⃝🥰",
-        "➺❥⃟2সে যখনই আমায় দেখে⸙❥︎𝄟≛⃝🎀",
-        "➺❥⃟3পড়েনা চোখেতে পলক⸙❥︎𝄟≛⃝💓",
-        "➺❥⃟4আর আসেনা কথা মুখে⸙❥︎𝄟≛⃝🥀",
-        "➺❥⃟5কাজল কালো দুটি চোখে⸙❥︎𝄟≛⃝🥰",
-        "➺❥⃟6সে যখনই আমায় দেখে⸙❥︎𝄟≛⃝🎀",
-        "➺❥⃟7পড়েনা চোখেতে পলক⸙❥︎𝄟≛⃝💓",
-        "➺❥⃟8আর আসেনা কথা মুখে⸙❥︎𝄟≛⃝🥀",
-        "➺❥⃟9তার চলে যাওয়া⸙❥︎𝄟≛⃝",
-        "➺❥⃟10ফিরে একটু চাওয়া⸙❥︎𝄟≛⃝🥀",
-        "➺❥⃟11এই বুকেতে⸙❥︎𝄟≛⃝🤍",
-        "➺❥⃟12ঝড় তুলে যায়⸙❥︎𝄟≛⃝☺️",
-        "➺❥⃟13যার ছবি এই⸙❥︎𝄟≛⃝🥀",
-        "➺❥⃟14মন এঁকে যায়⸙❥︎𝄟≛⃝💓",
-        "➺❥⃟15যার কথা ভেবে⸙❥︎𝄟≛⃝💝",
-        "➺❥⃟16দিন কেটে যায়⸙❥︎𝄟≛⃝🥀",
-        "➺❥⃟17সে কি জানে শুধু তাকে⸙❥︎𝄟≛⃝🌷",
-        "➺❥⃟18ভালোবাসে আমার হৃদয়⸙❥︎𝄟≛⃝🎀",
-        "➺❥⃟19যার ছবি এই ⸙❥︎𝄟≛⃝🥀",
-        "➺❥⃟20মন এঁকে যায়⸙❥︎𝄟≛⃝💓"
+    // আপনার লিরিক্স ডাটা (Lyrics - 1 এর ভেতর ২০টি লাইন রাখা আছে)
+    const lyricsData = [
+        {
+            title: "Lyrics - 1",
+            subtitle: "কাজল কালো দুটি চোখে",
+            lines: [
+                "➺❥⃟1কাজল কালো দুটি চোখে⸙❥︎𝄟≛⃝🥰",
+                "➺❥⃟2সে যখনই আমায় দেখে⸙❥︎𝄟≛⃝🎀",
+                "➺❥⃟3পড়েনা চোখেতে পলক⸙❥︎𝄟≛⃝💓",
+                "➺❥⃟4আর আসেনা কথা মুখে⸙❥︎𝄟≛⃝🥀",
+                "➺❥⃟5কাজল কালো দুটি চোখে⸙❥︎𝄟≛⃝🥰",
+                "➺❥⃟6সে যখনই আমায় দেখে⸙❥︎𝄟≛⃝🎀",
+                "➺❥⃟7পড়েনা চোখেতে পলক⸙❥︎𝄟≛⃝💓",
+                "➺❥⃟8আর আসেনা কথা মুখে⸙❥︎𝄟≛⃝🥀",
+                "➺❥⃟9তার চলে যাওয়া⸙❥︎𝄟≛⃝",
+                "➺❥⃟10ফিরে একটু চাওয়া⸙❥︎𝄟≛⃝🥀",
+                "➺❥⃟11এই বুকেতে⸙❥︎𝄟≛⃝🤍",
+                "➺❥⃟12ঝড় তুলে যায়⸙❥︎𝄟≛⃝☺️",
+                "➺❥⃟13যার ছবি এই⸙❥︎𝄟≛⃝🥀",
+                "➺❥⃟14মন এঁকে যায়⸙❥︎𝄟≛⃝💓",
+                "➺❥⃟15যার কথা ভেবে⸙❥︎𝄟≛⃝💝",
+                "➺❥⃟16দিন কেটে যায়⸙❥︎𝄟≛⃝🥀",
+                "➺❥⃟17সে কি জানে শুধু তাকে⸙❥︎𝄟≛⃝🌷",
+                "➺❥⃟18ভালোবাসে আমার হৃদয়⸙❥︎𝄟≛⃝🎀",
+                "➺❥⃟19যার ছবি এই ⸙❥︎𝄟≛⃝🥀",
+                "➺❥⃟20মন এঁকে যায়⸙❥︎𝄟≛⃝💓"
+            ]
+        },
+        {
+            title: "Lyrics - 2",
+            subtitle: "নতুন গানের ফোল্ডার (খালি)",
+            lines: [
+                "এখানে পরবর্তীতে নতুন গান যোগ করবেন"
+            ]
+        }
     ];
 
-    const container = document.getElementById('lyrics-list');
+    const folderContainer = document.getElementById('folder-list');
 
-    lines.forEach(text => {
+    lyricsData.forEach((data, index) => {
         const div = document.createElement('div');
-        div.className = 'lyric-card';
-        div.onclick = () => copyText(text);
+        div.className = 'folder-card';
+        div.onclick = () => openLyrics(index);
 
         div.innerHTML = `
-            <span class="lyric-text">${text}</span>
-            <button class="copy-btn">কপি</button>
+            <div class="folder-info">
+                <h3>📁 ${data.title}</h3>
+                <p>${data.subtitle}</p>
+            </div>
+            <span class="open-icon">➔</span>
         `;
-        container.appendChild(div);
+        folderContainer.appendChild(div);
     });
+
+    function openLyrics(index) {
+        const item = lyricsData[index];
+        document.getElementById('modalTitle').innerText = item.title + " - " + item.subtitle;
+        
+        const container = document.getElementById('lyricsContainer');
+        container.innerHTML = '';
+
+        item.lines.forEach(text => {
+            const lyricDiv = document.createElement('div');
+            lyricDiv.className = 'lyric-card';
+            lyricDiv.onclick = () => copyText(text);
+
+            lyricDiv.innerHTML = `
+                <span class="lyric-text">${text}</span>
+                <button class="copy-btn">কপি</button>
+            `;
+            container.appendChild(lyricDiv);
+        });
+
+        document.getElementById('lyricsModal').style.display = 'flex';
+    }
+
+    function closeModal() {
+        document.getElementById('lyricsModal').style.display = 'none';
+    }
 
     function copyText(text) {
         navigator.clipboard.writeText(text);
