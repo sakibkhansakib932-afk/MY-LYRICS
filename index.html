@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LYRICS Touch To Copy</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #f7f6fb;
+            color: #333;
+            display: flex;
+            justify-content: center;
+        }
+
+        .app-container {
+            width: 100%;
+            max-width: 480px;
+            background: #f7f6fb;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            padding-bottom: 70px;
+        }
+
+        /* Top Header */
+        .top-bar {
+            background: #ffffff;
+            padding: 15px 20px;
+            display: flex;
+            align-items: center;
+            border-bottom: 1px solid #eee;
+            font-weight: bold;
+            font-size: 18px;
+        }
+
+        .top-bar i {
+            margin-right: 10px;
+            color: #f39c12;
+        }
+
+        /* Content Section */
+        .content {
+            padding: 20px;
+            flex: 1;
+        }
+
+        .header-title {
+            font-size: 26px;
+            font-weight: 800;
+            color: #1a1a1a;
+            margin-bottom: 4px;
+        }
+
+        .header-subtitle {
+            font-size: 14px;
+            color: #888;
+            margin-bottom: 20px;
+        }
+
+        /* Lyrics Cards List */
+        .lyrics-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .lyrics-card {
+            background: #ffffff;
+            border-radius: 16px;
+            padding: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.03);
+            cursor: pointer;
+        }
+
+        .card-left {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .file-icon {
+            font-size: 28px;
+            color: #a2d2ff;
+        }
+
+        .file-info h3 {
+            font-size: 18px;
+            font-weight: 700;
+            color: #111;
+        }
+
+        .file-info p {
+            font-size: 13px;
+            color: #999;
+        }
+
+        .card-actions {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-icon {
+            width: 36px;
+            height: 36px;
+            border-radius: 10px;
+            border: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .btn-edit {
+            background: #f0eefd;
+            color: #6c5ce7;
+        }
+
+        .btn-delete {
+            background: #ffeaea;
+            color: #ff6b6b;
+        }
+
+        .arrow-icon {
+            color: #ccc;
+            margin-left: 4px;
+        }
+
+        /* Add Button */
+        .add-btn {
+            width: 100%;
+            background: #1e1b2e;
+            color: #fff;
+            border: none;
+            padding: 16px;
+            border-radius: 16px;
+            font-size: 16px;
+            font-weight: 600;
+            margin-top: 25px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        /* Navigation Bar */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            max-width: 480px;
+            background: #ffffff;
+            display: flex;
+            justify-content: space-around;
+            padding: 10px 0;
+            border-top: 1px solid #eee;
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            font-size: 11px;
+            color: #888;
+            cursor: pointer;
+            gap: 4px;
+        }
+
+        .nav-item.active {
+            color: #6c5ce7;
+        }
+
+        .nav-item i {
+            font-size: 18px;
+        }
+
+        /* Lyrics View Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            justify-content: center;
+            align-items: center;
+            z-index: 100;
+        }
+
+        .modal-content {
+            background: white;
+            width: 90%;
+            max-width: 400px;
+            border-radius: 16px;
+            padding: 20px;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .close-btn {
+            cursor: pointer;
+            font-size: 20px;
+        }
+
+        .lyric-item {
+            background: #f8f9fa;
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .copy-btn {
+            background: #6c5ce7;
+            color: white;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 12px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="app-container">
+    <!-- Top Header -->
+    <div class="top-bar">
+        <i class="fa-solid fa-pen-to-square"></i> LYRICS Touch To Copy
+    </div>
+
+    <!-- Main Content -->
+    <div class="content">
+        <div class="header-title">My Lyrics Files</div>
+        <div class="header-subtitle">প্রতিটি Lyrics আলাদা File হিসেবে রাখুন</div>
+
+        <!-- Files List -->
+        <div class="lyrics-list" id="lyricsList"></div>
+
+        <button class="add-btn" onclick="addNewFile()">
+            <i class="fa-solid fa-plus"></i> Add Lyrics File
+        </button>
+    </div>
+
+    <!-- Bottom Navigation -->
+    <div class="bottom-nav">
+        <div class="nav-item active">
+            <i class="fa-solid fa-house"></i>
+            <span>Home</span>
+        </div>
+        <div class="nav-item">
+            <i class="fa-solid fa-magnifying-glass"></i>
+            <span>Search</span>
+        </div>
+        <div class="nav-item">
+            <i class="fa-regular fa-heart"></i>
+            <span>Favorites</span>
+        </div>
+        <div class="nav-item">
+            <i class="fa-regular fa-user"></i>
+            <span>My Profile</span>
+        </div>
+    </div>
+</div>
+
+<!-- Modal for viewing lyrics inside a file -->
+<div class="modal" id="lyricsModal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3 id="modalTitle">Lyrics 1</h3>
+            <span class="close-btn" onclick="closeModal()">&times;</span>
+        </div>
+        <div id="modalLyricsList"></div>
+    </div>
+</div>
+
+<script>
+    // Initial Sample Data (২১ টি গান সহ)
+    let lyricsFiles = [
+        {
+            id: 1,
+            title: "Lyrics 1",
+            items: [
+                "১. তোমার খোলা হাওয়া লাগিয়ে পালে",
+                "২. আমি চিনি গো চিনি তোমারে ওগো বিদেশিনী",
+                "৩. তুমি রবে নীরবে হৃদয়ে মম",
+                "৪. এমন দিনে তারে বলা যায়",
+                "৫. এই পথ যদি না শেষ হয়",
+                "৬. জীবন খাতার প্রতি পাতায়",
+                "৭. মায়াবন বিহারিনী হরিণী",
+                "৮. আলো আমার আলো ওগো",
+                "৯. জগতে আনন্দযজ্ঞে আমার নিমন্ত্রণ",
+                "১০. পুরনো সেই দিনের কথা",
+                "১১. মেঘের কোলে রোদ হেসেছে",
+                "১২. একলা চলো রে",
+                "১৩. পাগলা হাওয়ার বাদল দিনে",
+                "১৪. আমার হিয়ার মাঝে লুকিয়ে ছিলে",
+                "১৫. গ্রামে ওই দখিন সমীরণে",
+                "১৬. আনন্দলোকে মঙ্গলালয়ে",
+                "১৭. আমার মন মানে না",
+                "১৮. ঝর ঝর বরিষে বারিধারা",
+                "১৯. তোমায় গান শোনাবো",
+                "২০. দাঁড়িয়ে আছো তুমি আমার গানের ওপারে",
+                "২১. সুন্দরে সুন্দর তুমি হেই প্রভূ"
+            ]
+        },
+        { id: 2, title: "Lyrics 2", items: Array(23).fill("নমুনা গান") },
+        { id: 3, title: "Lyrics 3", items: Array(36).fill("নমুনা গান") },
+        { id: 4, title: "Lyrics 4", items: Array(20).fill("নমুনা গান") }
+    ];
+
+    // Render Files List
+    function renderList() {
+        const container = document.getElementById('lyricsList');
+        container.innerHTML = '';
+
+        lyricsFiles.forEach((file, index) => {
+            const card = document.createElement('div');
+            card.className = 'lyrics-card';
+            card.innerHTML = `
+                <div class="card-left" onclick="openFile(${file.id})">
+                    <i class="fa-regular fa-file-lines file-icon"></i>
+                    <div class="file-info">
+                        <h3>${file.title}</h3>
+                        <p>${file.items.length}টি Lyrics</p>
+                    </div>
+                </div>
+                <div class="card-actions">
+                    <button class="btn-icon btn-edit" onclick="editFile(${file.id}, event)"><i class="fa-solid fa-pen"></i></button>
+                    <button class="btn-icon btn-delete" onclick="deleteFile(${file.id}, event)"><i class="fa-solid fa-trash-can"></i></button>
+                    <i class="fa-solid fa-chevron-right arrow-icon"></i>
+                </div>
+            `;
+            container.appendChild(card);
+        });
+    }
+
+    // Add New File
+    function addNewFile() {
+        const name = prompt("ফাইল এর নাম লিখুন:", `Lyrics ${lyricsFiles.length + 1}`);
+        if(name) {
+            lyricsFiles.push({
+                id: Date.now(),
+                title: name,
+                items: []
+            });
+            renderList();
+        }
+    }
+
+    // Edit File Name
+    function editFile(id, e) {
+        e.stopPropagation();
+        const file = lyricsFiles.find(f => f.id === id);
+        const newName = prompt("নতুন নাম দিন:", file.title);
+        if(newName) {
+            file.title = newName;
+            renderList();
+        }
+    }
+
+    // Delete File
+    function deleteFile(id, e) {
+        e.stopPropagation();
+        if(confirm("আপনি কি নিশ্চিত এটি ডিলেট করতে চান?")) {
+            lyricsFiles = lyricsFiles.filter(f => f.id !== id);
+            renderList();
+        }
+    }
+
+    // Open Lyrics Modal
+    function openFile(id) {
+        const file = lyricsFiles.find(f => f.id === id);
+        document.getElementById('modalTitle').innerText = file.title;
+        const lyricsContainer = document.getElementById('modalLyricsList');
+        lyricsContainer.innerHTML = '';
+
+        if(file.items.length === 0) {
+            lyricsContainer.innerHTML = '<p style="color:#888;">কোন লিরিক্স পাওয়া যায়নি।</p>';
+        } else {
+            file.items.forEach(lyric => {
+                const div = document.createElement('div');
+                div.className = 'lyric-item';
+                div.innerHTML = `
+                    <span>${lyric}</span>
+                    <button class="copy-btn" onclick="copyText('${lyric}')">Copy</button>
+                `;
+                lyricsContainer.appendChild(div);
+            });
+        }
+
+        document.getElementById('lyricsModal').style.display = 'flex';
+    }
+
+    function closeModal() {
+        document.getElementById('lyricsModal').style.display = 'none';
+    }
+
+    // Copy functionality
+    function copyText(text) {
+        navigator.clipboard.writeText(text);
+        alert('কপি হয়েছে: ' + text);
+    }
+
+    // Initialize Page
+    renderList();
+</script>
+</body>
+          </html>
